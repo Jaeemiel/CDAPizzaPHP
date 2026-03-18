@@ -1,0 +1,14 @@
+# Dépendances
+vendor/
+
+# Fichiers sensibles
+.env
+
+# IDE
+.idea/
+
+# Logs
+*.log
+
+# Cache phpunit
+.phpunit.result.cache

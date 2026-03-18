@@ -1,0 +1,64 @@
+DROP TABLE IF EXISTS commande_pizza;
+DROP TABLE IF EXISTS commande;
+DROP TABLE IF EXISTS pizza;
+DROP TABLE IF EXISTS client;
+
+CREATE TABLE IF NOT EXISTS client(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pseudo VARCHAR(50) NOT NULL,
+    telephone VARCHAR(12) NOT NULL,
+    rue VARCHAR(255) NOT NULL,
+    code_postal VARCHAR(10) NOT NULL,
+    ville VARCHAR(100) NOT NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS pizza(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    libelle VARCHAR(100) NOT NULL,
+    ingredients TEXT NOT NULL,
+    prix DECIMAL(10,2) NOT NULL,
+    en_stock BOOLEAN NOT NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS commande(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    montant DECIMAL(10,2) NOT NULL DEFAULT 0, -- 10 = nb de chiffre total
+    date_heure DATETIME,
+    etat ENUM('PAYER', 'PREPARATION', 'PRETE','LIVRER') DEFAULT 'PAYER',
+    client_id INT NOT NULL,
+    FOREIGN KEY (client_id) REFERENCES client(id) ON UPDATE CASCADE ON DELETE RESTRICT
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS commande_pizza(
+    commande_id INT NOT NULL,
+    pizza_id INT NOT NULL,
+    nb_pizza INT NOT NULL,
+    prix_unitaire DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY (commande_id, pizza_id),
+    FOREIGN KEY (commande_id) REFERENCES commande(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    FOREIGN KEY (pizza_id) REFERENCES pizza(id) ON UPDATE CASCADE ON DELETE RESTRICT
+) ENGINE=InnoDB;
+
+
+
+DELIMITER $$
+
+CREATE TRIGGER trg_calcule_montant_after_insert
+AFTER INSERT ON commande_pizza
+FOR EACH ROW
+BEGIN
+  UPDATE commande set montant = montant + (NEW.nb_pizza * New.prix_unitaire) where id = NEW.commande_id;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER trg_calcule_montant_after_update
+AFTER Update ON commande_pizza
+FOR EACH ROW
+BEGIN
+  UPDATE commande set montant = montant - (OLD.nb_pizza * OLD.prix_unitaire) + (NEW.nb_pizza * NEW.prix_unitaire) where id = NEW.commande_id;
+END$$
+
+DELIMITER ;

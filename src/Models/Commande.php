@@ -38,6 +38,12 @@ class Commande extends Model{
     public float $montant = 0;
 
     /**
+     * Commentaire de la commande
+     * @var string
+     */
+    public ?string $commentaire = '';
+
+    /**
      * Clé étrangère de client
      * @var int|null
      */
@@ -84,6 +90,15 @@ class Commande extends Model{
         return $nom;
     }
 
+    public function getQuantityPizza(){
+        $targetTable =  "pizza";
+        $pivotTable = "commande_pizza";
+        $foreignKey = "commande_id";
+        $targetKey = $targetTable . "_id";
+        $sql = "SELECT {$targetTable}.libelle, {$pivotTable}.* FROM {$targetTable} JOIN {$pivotTable} 
+            ON {$targetTable}.id = {$pivotTable}.{$targetKey} WHERE {$pivotTable}.{$foreignKey} = :id";
+        return $this->readQuery($sql, ["id" => $this->id], false, Commande_Pizza::class);
+    }
 
 }
 

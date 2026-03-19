@@ -5,10 +5,10 @@ CREATE DATABASE IF NOT EXISTS CDAPizza;
 GRANT ALL PRIVILEGES ON CDAPizza.* TO 'lambdas'@'%';
 
 USE CDAPizza;
-DROP TABLE IF EXISTS commande_pizza;
-DROP TABLE IF EXISTS commande;
-DROP TABLE IF EXISTS pizza;
-DROP TABLE IF EXISTS client;
+ DROP TABLE IF EXISTS commande_pizza;
+ DROP TABLE IF EXISTS commande;
+ DROP TABLE IF EXISTS pizza;
+ DROP TABLE IF EXISTS client;
 
 CREATE TABLE IF NOT EXISTS client(
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS commande(
     montant DECIMAL(10,2) NOT NULL DEFAULT 0, -- 10 = nb de chiffre total
     date_heure DATETIME,
     etat ENUM('PAYER', 'PREPARATION', 'PRETE','LIVRER') DEFAULT 'PAYER',
+    commentaire TEXT,
     client_id INT NOT NULL,
     FOREIGN KEY (client_id) REFERENCES client(id) ON UPDATE CASCADE ON DELETE RESTRICT
     ) ENGINE=InnoDB;
@@ -61,14 +62,14 @@ DELIMITER ;
 
 DELIMITER $$
 
-    CREATE TRIGGER trg_calcule_montant_after_update
-    AFTER Update ON commande_pizza
-    FOR EACH ROW
-        BEGIN
-            UPDATE commande set montant = montant - (OLD.nb_pizza * OLD.prix_unitaire) + (NEW.nb_pizza * NEW.prix_unitaire) where id = NEW.commande_id;
-        END$$
+CREATE TRIGGER trg_calcule_montant_after_update
+AFTER Update ON commande_pizza
+FOR EACH ROW
+    BEGIN
+        UPDATE commande set montant = montant - (OLD.nb_pizza * OLD.prix_unitaire) + (NEW.nb_pizza * NEW.prix_unitaire) where id = NEW.commande_id;
+    END$$
 
-    DELIMITER ;
+DELIMITER ;
 
 -- ================================================
 -- BASE PERSONNEL

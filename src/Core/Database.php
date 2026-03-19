@@ -23,14 +23,14 @@ class Database{
      */
     public static function getPDO(string $connection = 'pizzeria') : ?PDO{
         $property = 'pdo' . ucfirst($connection);  // pdoPizzeria ou pdoPersonnel
-        if(!empty(self::$pdo)){
-            return self::$pdo;
+        if(!empty(self::$$property)){
+            return self::$$property;
         }else{
             try {
                 $db_cfg = Config::get("database")[$connection];
                 $dsn ="mysql:dbname={$db_cfg["name"]};host={$db_cfg["host"]}";
-                self::$pdo = new PDO($dsn, $db_cfg["username"], $db_cfg["password"]);
-                return self::$pdo;
+                self::$$property = new PDO($dsn, $db_cfg["username"], $db_cfg["password"]);
+                return self::$$property;
             } catch (\Exception $e) {
                 echo "Attention erreur connexion BDD ({$connection}) ! " . $e->getMessage();
                 return null;

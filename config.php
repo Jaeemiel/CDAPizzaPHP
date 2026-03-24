@@ -13,7 +13,7 @@ return [
         ],
         "personnel" => [
             "host"     => "db",       // même service Docker
-            "name"     => "CDApersonnel",
+            "name"     => "CDAPersonnel",
             "username" => "lambdas",
             "password" => "lambdas",
         ],

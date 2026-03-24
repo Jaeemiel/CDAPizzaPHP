@@ -10,13 +10,20 @@ USE CDAPizza;
  DROP TABLE IF EXISTS pizza;
  DROP TABLE IF EXISTS client;
 
+
+-- Maj traçabilité : Client, Pizza, Utilisateur
+-- Maj table client pseudo -> nom, prénom
 CREATE TABLE IF NOT EXISTS client(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    pseudo VARCHAR(50) NOT NULL,
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL,
     telephone VARCHAR(12) NOT NULL,
     rue VARCHAR(255) NOT NULL,
     code_postal VARCHAR(10) NOT NULL,
-    ville VARCHAR(100) NOT NULL
+    ville VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL
     ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS pizza(
@@ -24,13 +31,17 @@ CREATE TABLE IF NOT EXISTS pizza(
     libelle VARCHAR(100) NOT NULL,
     ingredients TEXT NOT NULL,
     prix DECIMAL(10,2) NOT NULL,
-    en_stock BOOLEAN NOT NULL
+    en_stock BOOLEAN NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL
     ) ENGINE=InnoDB;
 
+-- maj date_heure -> created_at
 CREATE TABLE IF NOT EXISTS commande(
     id INT AUTO_INCREMENT PRIMARY KEY,
     montant DECIMAL(10,2) NOT NULL DEFAULT 0, -- 10 = nb de chiffre total
-    date_heure DATETIME,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     etat ENUM('PAYER', 'PREPARATION', 'PRETE','LIVRER') DEFAULT 'PAYER',
     commentaire TEXT,
     client_id INT NOT NULL,
@@ -75,10 +86,10 @@ DELIMITER ;
 -- BASE PERSONNEL
 -- ================================================
 
-CREATE DATABASE IF NOT EXISTS CDApersonnel;
-GRANT ALL PRIVILEGES ON CDApersonnel.* TO 'lambdas'@'%';
+CREATE DATABASE IF NOT EXISTS CDAPersonnel;
+GRANT ALL PRIVILEGES ON CDAPersonnel.* TO 'lambdas'@'%';
 
-USE CDApersonnel;
+USE CDAPersonnel;
 DROP TABLE IF EXISTS utilisateur;
 
 CREATE TABLE IF NOT EXISTS utilisateur (
@@ -86,8 +97,13 @@ CREATE TABLE IF NOT EXISTS utilisateur (
     login    VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,     -- hash bcrypt, jamais en clair
     role     ENUM('GUICHET', 'CUISINE') NOT NULL,
-    actif    BOOLEAN NOT NULL DEFAULT TRUE
+    actif    BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL
     ) ENGINE=InnoDB;
 
 
+-- actif comme en_stock pour pizza c'est temporaire
+-- delete_at c'est définitif jusqu'à qu'on le rembauche
 

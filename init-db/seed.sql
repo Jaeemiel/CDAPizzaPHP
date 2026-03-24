@@ -1,15 +1,14 @@
 USE CDAPizza;
--- DELETE TABLE client;
--- DELETE TABLE pizza;
--- DELETE TABLE commande;
--- DELETE TABLE commande_pizza;
+-- TRUNCATE TABLE commande_pizza;
+-- TRUNCATE TABLE commande;
+-- TRUNCATE TABLE client;
+-- TRUNCATE TABLE pizza;
 
-
-INSERT INTO client (pseudo, telephone, rue, code_postal, ville) VALUES
-('Jean', '0612345678', '12 rue des Lilas', '40000', 'Mont-de-Marsan'),
-('Marie', '0623456789', '5 avenue de la Paix', '40000', 'Mont-de-Marsan'),
-('Pierre', '0634567890', '8 rue du Moulin', '40100', 'Dax'),
-('Sophie', '0645678901', '3 boulevard Victor Hugo', '40100', 'Dax');
+INSERT INTO client (nom, prenom, telephone, rue, code_postal, ville) VALUES
+('Dupont', 'Jean', '0612345678', '12 rue des Lilas', '40000', 'Mont-de-Marsan'),
+('Martin', 'Marie', '0623456789', '5 avenue de la Paix', '40000', 'Mont-de-Marsan'),
+('Durand', 'Pierre', '0634567890', '8 rue du Moulin', '40100', 'Dax'),
+('Leroy', 'Sophie', '0645678901', '3 boulevard Victor Hugo', '40100', 'Dax');
 
 INSERT INTO pizza (libelle, ingredients, prix, en_stock) VALUES
 ('Pepperoni', 'Tomate, Mozzarella, Pepperoni', 10.50, 1),
@@ -17,7 +16,7 @@ INSERT INTO pizza (libelle, ingredients, prix, en_stock) VALUES
 ('Savoyarde', 'Crème, Reblochon, Lardons, Pommes de terre', 11.50, 1),
 ('Végétarienne', 'Tomate, Mozzarella, Poivrons, Champignons', 8.50, 1);
 
-INSERT INTO commande (date_heure, etat, client_id) VALUES
+INSERT INTO commande (created_at, etat, client_id) VALUES
 ('2024-03-01 12:00:00', 'LIVRER', 1),
 ('2024-03-02 19:30:00', 'PRETE', 2),
 ('2024-03-03 20:00:00', 'PREPARATION', 3),
@@ -38,8 +37,9 @@ INSERT INTO commande_pizza (commande_id, pizza_id, nb_pizza, prix_unitaire) VALU
 (6, 3, 1, 11.50);
 
 
-USE CDApersonnel;
--- DELETE TABLE utilisateur
+USE CDAPersonnel;
+-- TRUNCATE TABLE utilisateur
 INSERT INTO utilisateur (login, password, role) VALUES
 ('guichet1', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'GUICHET'),
 ('cuisine1', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'CUISINE');
+

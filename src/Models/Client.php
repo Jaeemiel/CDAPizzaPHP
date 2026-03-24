@@ -17,13 +17,19 @@ class Client extends Model
      * Clé primaire
      * @var ?int
      */
-    public ?int $id;
+    public ?int $id = null;
 
     /**
      * Nom du client
      * @var string
      */
-    public string $pseudo = "";
+    public string $nom = "";
+
+    /**
+     * Prénom du client
+     * @var string
+     */
+    public string $prenom = "";
 
     /**
      * @var string
@@ -45,6 +51,9 @@ class Client extends Model
      */
     public string $ville = "";
 
+    public ?string $created_at = null;
+    public ?string $updated_at = null;
+    public ?string $deleted_at = null;
 
 
 
@@ -55,7 +64,8 @@ class Client extends Model
      * @var string[]
      */
     public array $fillable = [
-        "pseudo",
+        "nom",
+        "prenom",
         "telephone",
         "rue",
         "code_postal",

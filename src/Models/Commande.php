@@ -17,13 +17,13 @@ class Commande extends Model{
      * Clé primaire
      * @var ?int
      */
-    public ?int $id;
+    public ?int $id = null;
 
     /**
      * Date avec l'heure de la commande
-     * @var string
+     * @var string|null
      */
-    public string $date_heure = "";
+    public ?string $created_at = null;
 
     /**
      * Etat de la commande
@@ -39,9 +39,9 @@ class Commande extends Model{
 
     /**
      * Commentaire de la commande
-     * @var string
+     * @var string|null
      */
-    public ?string $commentaire = '';
+    public ?string $commentaire = null;
 
     /**
      * Clé étrangère de client
@@ -56,10 +56,7 @@ class Commande extends Model{
      * @var string[]
      */
     public array $fillable = [
-        "libelle",
-        "ingredients",
-        "prix",
-        "en_stock",
+        "commentaire",
         "client_id",
     ];
 
@@ -85,9 +82,9 @@ class Commande extends Model{
     public function getNameClient(){
         $client = $this->client();
 
-        $nom = $client->pseudo;
-
-        return $nom;
+        $nom = $client->nom;
+        $prenom = $client->prenom;
+        return $nom . ' ' . $prenom;
     }
 
     public function getQuantityPizza(){

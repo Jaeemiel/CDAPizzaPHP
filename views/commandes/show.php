@@ -1,37 +1,73 @@
+
+
+
 <div class="container py-5">
-    <div class="card mx-auto shadow-lg animate-fade-in" style="max-width: 1200px; border-radius: 1rem; background: linear-gradient(145deg, #f8f9fa, #e9ecef);">
+    <div class="card mx-auto shadow-lg" style="max-width: 1200px;">
         <div class="card-body p-4">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-dark">
-                    <tr>
-                        <th colspan="2">Commande <?= $commande->id ?></th>
+
+            <!-- En-tête -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Commande #<?= $commande->id ?></h2>
+                <?php $etat = Etat_commande::from($commande->etat); ?>
+                    <span class="<?= $etat->badge() ?>">
+                        <?= $etat->label() ?>
+                    </span>
+            </div>
+
+
+            <!-- Infos commande -->
+            <p><strong>Client :</strong> <?= htmlspecialchars($commande->client()->nom) ?> <?= htmlspecialchars($commande->client()->prenom) ?></p>
+            <p><strong>Date :</strong> <?= htmlspecialchars($commande->created_at) ?></p>
+
+            <!-- Pizzas -->
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                <tr>
+                    <th>Pizza</th>
+                    <th>Prix unitaire</th>
+                    <th>Quantité</th>
+                    <th>Sous-total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($commande->getQuantityPizza() as $pizza): ?>
+                    <tr class="table-row-hover stagger">
+                        <td><?= htmlspecialchars($pizza->libelle)?></td>
+                        <td><?= htmlspecialchars($pizza->prix_unitaire)?></td>
+                        <td><?= htmlspecialchars($pizza->nb_pizza)?></td>
+                        <td><?= htmlspecialchars(number_format($pizza->nb_pizza * $pizza->prix_unitaire,2))?> €</td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="col">Pizza</th>
-                        <th scope="col">Quantité</th>
-                    </tr>
+                <?php endforeach;?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan=3><strong>Total</strong></td>
+                    <td><strong><?= htmlspecialchars(number_format($commande->montant,2))?> €</strong></td>
+                </tr>
+                </tfoot>
+            </table>
 
+            <p><strong>Commentaire :</strong> <?= $commande->commentaire ?? 'Aucun' ?></p>
 
-                    <?php foreach ($commande->getQuantityPizza() as $pizza): ?>
-                        <tr class="table-row-hover stagger">
-                            <td><?= htmlspecialchars($pizza->libelle)?></td>
-                            <td><?= htmlspecialchars($pizza->nb_pizza)?></td>
-                        </tr>
-                    <?php endforeach;?>
+            <!-- Actions -->
+            <div class="d-flex gap-2 mt-4">
+                <a href="/commandes/update/<?= $commande->id ?>" class="btn btn-warning">Modifier</a>
 
-                    </tbody>
-                </table>
-                <h4>État :</h4>
-                <?= htmlspecialchars($commande->etat) ?>
-                <h4>Date et heure :</h4>
-                <?= htmlspecialchars($commande->date_heure) ?>
-                <h4>Commentaire :</h4>
-                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"><?= $commande->commentaire ?></textarea>
+                <!-- Bouton changement état -->
+                <form action="/commandes/<?= $commande->id ?>/etat" method="POST">
+                    <select name="etat" class="form-select d-inline w-auto">
+                        <?php foreach (Etat_commande::cases() as $etat): ?>
+                            <option value="<?= $etat->value ?>"
+                                <?= $commande->etat === $etat->value ? 'selected' : '' ?>>
+                                <?= $etat->value ?>
+                            </option>
+                        <?php endforeach;?>
+                    </select>
+                    <button type="submit" class="btn btn-warning">Changer l'état</button>
+                </form>
 
-
+                <!-- Bouton retour -->
+                <a href="/commandes" class="btn btn-secondary">Retour</a>
             </div>
         </div>
     </div>

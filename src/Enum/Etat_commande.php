@@ -7,4 +7,27 @@ enum Etat_commande: string
     case PREPARATION = 'PREPARATION';
     case PRETE = 'PRETE';
     case LIVRER = 'LIVRER';
+
+    public function badge(): string
+    {
+        return match($this) {
+            self::PAYER       => 'badge bg-secondary',
+            self::PREPARATION => 'badge bg-warning text-dark',
+            self::PRETE       => 'badge bg-info text-dark',
+            self::LIVRER      => 'badge bg-success',
+        };
+    }
+
+    public function label(): string
+    {
+        return match($this) {
+            self::PAYER       => 'À payer',
+            self::PREPARATION => 'En préparation',
+            self::PRETE       => 'Prête',
+            self::LIVRER      => 'Livrée',
+        };
+    }
+
+
+
 }

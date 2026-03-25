@@ -1,6 +1,4 @@
 
-
-
 <div class="container py-5">
     <div class="card mx-auto shadow-lg" style="max-width: 1200px;">
         <div class="card-body p-4">
@@ -8,7 +6,6 @@
             <!-- En-tête -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Commande #<?= $commande->id ?></h2>
-                <?php $etat = Etat_commande::from($commande->etat); ?>
                     <span class="<?= $etat->badge() ?>">
                         <?= $etat->label() ?>
                     </span>
@@ -54,17 +51,16 @@
                 <a href="/commandes/update/<?= $commande->id ?>" class="btn btn-warning">Modifier</a>
 
                 <!-- Bouton changement état -->
-                <form action="/commandes/<?= $commande->id ?>/etat" method="POST">
-                    <select name="etat" class="form-select d-inline w-auto">
-                        <?php foreach (Etat_commande::cases() as $etat): ?>
-                            <option value="<?= $etat->value ?>"
-                                <?= $commande->etat === $etat->value ? 'selected' : '' ?>>
-                                <?= $etat->value ?>
-                            </option>
-                        <?php endforeach;?>
-                    </select>
-                    <button type="submit" class="btn btn-warning">Changer l'état</button>
-                </form>
+                <?php if ($etatSuivant): ?>
+                    <form action="/commandes/<?= $commande->id ?>/etat" method="POST">
+                        <input type="hidden" name="etat" value="<?= $etatSuivant->value ?>">
+                        <button type="submit" class="btn btn-warning">
+                            <?= $etatSuivant->label() ?>
+                        </button>
+                    </form>
+                <?php else: ?>
+                    <span class="text-muted">Commande finalisée</span>
+                <?php endif; ?>
 
                 <!-- Bouton retour -->
                 <a href="/commandes" class="btn btn-secondary">Retour</a>

@@ -1,7 +1,6 @@
 <?php
 
 use App\Helpers\Csrf;
-use App\Enum\Etat_commande;
 
 if (isset($commande->id)){
     $action = "update";
@@ -41,7 +40,7 @@ if (isset($commande->id)){
                 <?php foreach ($clients as $client) :?>
                     <option value="<?= $client->id ?>"
                         <?= (isset($commande->client_id) && $commande->client_id == $client->id) ? 'selected' : '' ?>>
-                        <?= escape($client->nom) ?> <?= escape($client->prenom) ?>
+                        <?= escape($client->nom) ?> <?= escape($client->prenom) ?> Tel: <?= escape($client->telephone)?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -53,12 +52,12 @@ if (isset($commande->id)){
                     <div class="statut-display">
                         <div class="statut-dot"></div>
                         <span>Défini automatiquement à la création</span>
-                        <span class="<?= Etat_commande::PAYER->badge() ?>"><?= Etat_commande::PAYER->label() ?></span>
+                        <span class="<?= $etatDefaut->badge() ?>"><?= $etatDefaut::PAYER->label() ?></span>
                     </div>
                     <div class="info-text"><i class="bi bi-info-circle me-1"></i>Le statut pourra être modifié après la création de la tâche.</div>
                 <?php else: ?>
                     <select name="etat" class="form-select d-inline w-auto">
-                        <?php foreach (Etat_commande::cases() as $etat): ?>
+                        <?php foreach ($etats as $etat): ?>
                             <option value="<?= $etat->value ?>"
                                 <?= $commande->etat === $etat->value ? 'selected' : '' ?>>
                                 <?= $etat->label() ?>
@@ -70,7 +69,8 @@ if (isset($commande->id)){
 
             <hr class="form-divider" />
 
-
+            <!-- Table Pizzas -->
+            <!-- TODO: Table de pizza-->
 
             <!-- Montant -->
             <div class="mb-3">
@@ -92,9 +92,7 @@ if (isset($commande->id)){
             <!-- Commentaire -->
             <div class="mb-4">
                 <label class="form-label">Commentaire</label>
-                <textarea name="commentaire"
-                          class="form-control"
-                          rows="3"
+                <textarea name="commentaire" class="form-control" rows="3"
                           placeholder="Instructions spéciales, allergies..."
                 ><?= isset($commande->commentaire) ? escape($commande->commentaire) : '' ?></textarea>
             </div>
@@ -103,7 +101,7 @@ if (isset($commande->id)){
             <!-- Boutons -->
             <div class="d-flex gap-3">
                 <button type="submit" class="btn btn-violet px-4 flex-grow-1">
-                    <i class="bi bi-plus-circle me-2"></i><?= $titreBtn ?>
+                    <i class="bi bi-<?= $action === 'create' ? 'plus-circle' : 'pencil-fill' ?> me-2"></i><?= $titreBtn ?>
                 </button>
                 <a href="/commandes" class="btn btn-outline-c px-4">Annuler</a>
             </div>

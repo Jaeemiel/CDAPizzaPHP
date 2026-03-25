@@ -17,7 +17,8 @@
                     <?php foreach ($commandes as $index => $commande) : ?>
                         <tr class="table-row-hover stagger" style="animation-delay: <?= $index * 0.08 ?>s;">
                             <th scope="row"><?= $commande->id ?></th>
-                            <td><?= htmlspecialchars($commande->etat) ?></td>
+                            <?php $etat = $etatsCommandes[$index]; ?>
+                            <td><span class="<?= $etat->badge() ?>"><?= $etat->label() ?></span></td>
                             <td><?= htmlspecialchars($commande->montant) ?></td>
                             <td>
                                 <a href="/commandes/show/<?=$commande->id?>" class="btn btn-success btn-gradient btn-sm me-2">
@@ -26,9 +27,13 @@
                                 <a href="/commandes/update/<?=$commande->id?>" class="btn btn-warning btn-gradient-warning btn-sm me-2">
                                     <i class="bi bi-pencil-fill me-1"></i>Update
                                 </a>
-                                <a href="/commandes/delete/<?=$commande->id?>" class="btn btn-danger btn-gradient-danger btn-sm">
-                                    <i class="bi bi-trash-fill me-1"></i>Delete
-                                </a>
+                                <form action="/commandes/delete/<?= $commande->id ?>" method="POST" class="d-inline"
+                                      onsubmit="return confirm('Supprimer cette commande ?')">
+                                    <!--                                    --><?php //= Csrf::field() ?>
+                                    <button type="submit" class="btn btn-danger btn-gradient-danger btn-sm">
+                                        <i class="bi bi-trash-fill me-1"></i>Delete
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     <?php endforeach; ?>

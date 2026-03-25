@@ -47,7 +47,7 @@ if (isset($client->id)){
             <!-- Téléphone -->
             <div class="mb-3">
                 <label class="form-label">Téléphone</label>
-                <input type="text" class="form-control" name="telephone"
+                <input type="tel" class="form-control" name="telephone"
                        value="<?= isset($client->telephone) ? escape($client->telephone): '' ?>"/>
             </div>
             <hr class="form-divider" />
@@ -75,7 +75,7 @@ if (isset($client->id)){
             <!-- Boutons -->
             <div class="d-flex gap-3">
                 <button type="submit" class="btn btn-violet px-4 flex-grow-1">
-                    <i class="bi bi-plus-circle me-2"></i><?= $titreBtn ?>
+                    <i class="bi bi-<?= $action === 'create' ? 'plus-circle' : 'pencil-fill' ?> me-2"></i><?= $titreBtn ?>
                 </button>
                 <a href="/commandes/create" class="btn btn-outline-c px-4">Annuler</a>
             </div>

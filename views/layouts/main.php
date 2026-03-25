@@ -32,6 +32,7 @@ use App\Core\Auth;
             <div class="collapse navbar-collapse" id="navbarContent">
 
                 <!-- Left menu -->
+                <!-- Commande -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-2">
                     <li class="nav-item">
                         <a class="nav-link fw-bold text-primary" href="/commandes">
@@ -45,11 +46,28 @@ use App\Core\Auth;
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link fw-bold text-primary" href="/clients/create">
-                            Création de client
+                    <!-- Client -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-bold text-primary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Client
                         </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/clients/create">Création</a></li>
+                            <li><a class="dropdown-item" href="/clients">Liste</a></li>
+                        </ul>
                     </li>
+
+                    <!-- Pizza -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-bold text-primary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Pizza
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/pizzas/create">Création</a></li>
+                            <li><a class="dropdown-item" href="/pizzas">Liste</a></li>
+                        </ul>
+                    </li>
+
                 </ul>
 
                 <!-- Right actions -->

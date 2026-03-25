@@ -30,18 +30,31 @@ $router
 //    ->post("/login", App\Controllers\AuthController::class . "::attemptlogin")
 //    ->get("/logout", App\Controllers\AuthController::class . "::logout")
     ->get("/commandes",App\Controllers\CommandeController::class. "::index")
-    ->get("/clients/create", App\Controllers\ClientController::class . "::create")
-    ->post("/clients/create", App\Controllers\ClientController::class . "::store")
-//    ->get("/clients/update/{id}", App\Controllers\ClientController::class . "::edit")
-//    ->post("/clients/update/{id}", App\Controllers\ClientController::class . "::update")
-//    ->post("/clients/delete/{id}", App\Controllers\ClientController::class . "::delete")
     ->get("/commandes/create", App\Controllers\CommandeController::class . "::create")
     ->post("/commandes/create", App\Controllers\CommandeController::class . "::store")
     ->get("/commandes/update/{id}", App\Controllers\CommandeController::class . "::edit")
     ->post("/commandes/update/{id}", App\Controllers\CommandeController::class . "::update")
     ->get("/commandes/show/{id}", App\Controllers\CommandeController::class ."::show")
-    ->get("/commandes/delete/{id}", App\Controllers\CommandeController::class ."::delete")
 
+    ->get("/clients",App\Controllers\ClientController::class. "::index")
+    ->get("/clients/create", App\Controllers\ClientController::class . "::create")
+    ->post("/clients/create", App\Controllers\ClientController::class . "::store")
+    ->get("/clients/update/{id}", App\Controllers\ClientController::class . "::edit")
+    ->post("/clients/update/{id}", App\Controllers\ClientController::class . "::update")
+    ->get("/clients/show/{id}", App\Controllers\ClientController::class ."::show")
+    ->post("/clients/delete/{id}", App\Controllers\ClientController::class . "::delete")
+
+
+    ->get("/commandes/delete/{id}", App\Controllers\CommandeController::class ."::delete")
+    ->post("/commandes/{id}/etat", App\Controllers\CommandeController::class . "::updateEtat")
+
+    ->get("/pizzas",App\Controllers\PizzaController::class. "::index")
+    ->get("/pizzas/create", App\Controllers\PizzaController::class . "::create")
+    ->post("/pizzas/create", App\Controllers\PizzaController::class . "::store")
+    ->get("/pizzas/update/{id}", App\Controllers\PizzaController::class . "::edit")
+    ->post("/pizzas/update/{id}", App\Controllers\PizzaController::class . "::update")
+    ->get("/pizzas/show/{id}", App\Controllers\PizzaController::class ."::show")
+    ->post("/pizzas/delete/{id}", App\Controllers\PizzaController::class . "::delete")
 
 
     ->run();

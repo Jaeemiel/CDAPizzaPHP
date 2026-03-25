@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS client(
 CREATE TABLE IF NOT EXISTS pizza(
     id INT AUTO_INCREMENT PRIMARY KEY,
     libelle VARCHAR(100) NOT NULL,
-    ingredients TEXT NOT NULL,
+    ingredients TEXT,
     prix DECIMAL(10,2) NOT NULL,
     en_stock BOOLEAN NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS commande_pizza(
     commande_id INT NOT NULL,
     pizza_id INT NOT NULL,
     nb_pizza INT NOT NULL,
-    prix_unitaire DECIMAL(10,2) NOT NULL,
+    prix_unitaire DECIMAL(10,2) NOT NULL, -- snapshot du prix au moment de la commande, indépendant de pizza.prix
     PRIMARY KEY (commande_id, pizza_id),
     FOREIGN KEY (commande_id) REFERENCES commande(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (pizza_id) REFERENCES pizza(id) ON UPDATE CASCADE ON DELETE RESTRICT
@@ -82,6 +82,12 @@ FOR EACH ROW
 
 DELIMITER ;
 
+-- ⚠ ATTENTION : pas de trigger AFTER DELETE sur commande_pizza
+-- Si une ligne est supprimée directement (DELETE FROM commande_pizza),
+-- le montant de la commande ne sera PAS recalculé automatiquement.
+-- Toute suppression doit passer par un UPDATE (nb_pizza = 0 ou remplacement)
+-- ou alors ajouter le trigger DELETE ci-dessous.
+
 -- ================================================
 -- BASE PERSONNEL
 -- ================================================
@@ -104,6 +110,6 @@ CREATE TABLE IF NOT EXISTS utilisateur (
     ) ENGINE=InnoDB;
 
 
--- actif comme en_stock pour pizza c'est temporaire
--- delete_at c'est définitif jusqu'à qu'on le rembauche
+-- actif : suspension temporaire du compte (ex: congé)
+-- deleted_at : désactivation définitive (ex: départ de l'entreprise)
 

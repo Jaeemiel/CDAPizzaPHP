@@ -5,7 +5,7 @@
  use App\Core\Traits\HasRelationships;
 
  /**
-  * Représente un utilisateur de l'application.
+  * Représente une pizza de la pizzeria.
   *
   * @package App\Core\Model
   */
@@ -16,31 +16,41 @@
       * Clé primaire
       * @var ?int
       */
-     public ?int $id;
+     public ?int $id = null;
 
      /**
-      * Titre de la tâche
+      * Nom de la pizza
       * @var string
       */
      public string $libelle = "";
 
      /**
-      * Description de la tâche
+      * Ingrédients de la pizza sous forme de texte libre
       * @var string
       */
-     public string $ingredients = "";
+     public ?string $ingredients = null;
 
      /**
-      * Date de création de la tâche
-      * @var string
+      * Prix actuel de la pizza (peut évoluer dans le temps)
+      * @var float
       */
-     public string $prix = "";
+     public float $prix = 0;
 
      /**
-      * Date de fin prévu pour la tâche
+      * Représente si la pizza est en stock ou non
       * @var bool
       */
      public bool $en_stock = true;
+
+
+     /** Date de création @var string|null */
+     public ?string $created_at = null;
+
+     /** Date de dernière modification @var string|null */
+     public ?string $updated_at = null;
+
+     /** Date de suppression logique (soft delete) @var string|null */
+     public ?string $deleted_at = null;
 
      /**
       * Liste des champs utilisés par le trait IsFillable

@@ -1,5 +1,5 @@
 <div class="container py-5">
-    <h1 class="text-center mb-4 fw-bold animate-fade-in">Liste des commandes</h1>
+    <h1 class="text-center mb-4 fw-bold animate-fade-in">Liste des clients</h1>
 
     <div class="card mx-auto shadow-lg animate-fade-in" style="max-width: 1200px; border-radius: 1rem; background: linear-gradient(145deg, #f8f9fa, #e9ecef);">
         <div class="card-body p-4">
@@ -8,27 +8,28 @@
                     <thead class="table-dark">
                     <tr>
                         <th scope="col">Id</th>
-                        <th scope="col">État</th>
-                        <th scope="col">Montant</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prenom</th>
+                        <th scope="col">Téléphone</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($commandes as $index => $commande) : ?>
+                    <?php foreach ($clients as $index => $client) : ?>
                         <tr class="table-row-hover stagger" style="animation-delay: <?= $index * 0.08 ?>s;">
-                            <th scope="row"><?= $commande->id ?></th>
-                            <?php $etat = $etatsCommandes[$index]; ?>
-                            <td><span class="<?= $etat->badge() ?>"><?= $etat->label() ?></span></td>
-                            <td><?= htmlspecialchars($commande->montant) ?></td>
+                            <th scope="row"><?= $client->id ?></th>
+                            <td><?= htmlspecialchars($client->nom) ?></td>
+                            <td><?= htmlspecialchars($client->prenom) ?></td>
+                            <td><?= htmlspecialchars($client->telephone) ?></td>
                             <td>
-                                <a href="/commandes/show/<?=$commande->id?>" class="btn btn-success btn-gradient btn-sm me-2">
+                                <a href="/clients/show/<?=$client->id?>" class="btn btn-success btn-gradient btn-sm me-2">
                                     <i class="bi bi-eye-fill me-1"></i>Show
                                 </a>
-                                <a href="/commandes/update/<?=$commande->id?>" class="btn btn-warning btn-gradient-warning btn-sm me-2">
+                                <a href="/clients/update/<?=$client->id?>" class="btn btn-warning btn-gradient-warning btn-sm me-2">
                                     <i class="bi bi-pencil-fill me-1"></i>Update
                                 </a>
-                                <form action="/commandes/delete/<?= $commande->id ?>" method="POST" class="d-inline"
-                                      onsubmit="return confirm('Supprimer cette commande ?')">
+                                <form action="/clients/delete/<?= $client->id ?>" method="POST" class="d-inline"
+                                      onsubmit="return confirm('Supprimer ce client ?')">
                                     <!--                                    --><?php //= Csrf::field() ?>
                                     <button type="submit" class="btn btn-danger btn-gradient-danger btn-sm">
                                         <i class="bi bi-trash-fill me-1"></i>Delete

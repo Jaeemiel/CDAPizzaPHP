@@ -28,6 +28,12 @@ enum Etat_commande: string
         };
     }
 
+    public function suivant(): ?self {
+        $cases = self::cases();
+        $index = array_search($this,$cases);
 
+        //Retourne null si dernier état
+        return $cases[$index+1] ?? null;
+    }
 
 }

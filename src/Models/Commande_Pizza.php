@@ -2,31 +2,40 @@
 
 namespace App\Models;
 
-class Commande_Pizza extends \App\Core\Model
+use App\Core\Model;
+
+
+/**
+ * Représente la table pivot entre Commande et Pizza.
+ *
+ * @package App\Core\Model
+ */
+class Commande_Pizza extends Model
 {
     /**
-     * Clé primaire
+     * Clé primaire composite avec pizza_id.
      * @var ?int
      */
-    public ?int $commande_id;
+    public ?int $commande_id = null;
 
     /**
-     * Clé primaire
+     * Clé primaire composite avec commande_id.
      * @var ?int
      */
-    public ?int $pizza_id;
+    public ?int $pizza_id = null;
 
     /**
      * Nombre de la pizza
      * @var ?int
      */
-    public ?int $nb_pizza;
+    public ?int $nb_pizza = null;
 
     /**
-     * Prix unitaire de la pizza
+     * Nom de la pizza — propriété hydratée dynamiquement via JOIN,
+     * n'existe pas dans la table commande_pizza.
      * @var string
      */
-    public string $libelle;
+    public string $libelle = "";
 
     /**
      * Prix unitaire de la pizza

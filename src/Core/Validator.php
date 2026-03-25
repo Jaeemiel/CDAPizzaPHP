@@ -173,7 +173,7 @@ class Validator
     public function max(mixed $value, string $field, array $params) : bool
     {
         if (!isset($params[0]) || !is_numeric($params[0])) {
-            throw new InvalidArgumentException("La règle min nécessite un paramètre numérique");
+            throw new InvalidArgumentException("La règle max nécessite un paramètre numérique");
         }
 
         $max = (int)$params[0];
@@ -325,34 +325,38 @@ class Validator
         ];
     }
 
-    /**
-     * Retourne le tableau des règles validées
-     *
-     * @return array
-     */
-    public function getValidated(){
-        return $this->validated;
-    }
+//    /**
+//     * Retourne le tableau des règles validées
+//     *
+//     * @return array
+//     */
+//    public function getValidated(){
+//        return $this->validated;
+//    }
+//
+//    /**
+//     * Retourne le tableau des erreurs avec messages
+//     *
+//     * @return array
+//     */
+//    public function getErrors(){
+//        return $this->errors;
+//    }
 
     /**
-     * Retourne le tableau des erreurs avec messages
-     *
-     * @return array
-     */
-    public function getErrors(){
-        return $this->errors;
-    }
-
-    /**
+     * Lance la validation ET retourne true si des erreurs existent.
+     * Appelle validate() implicitement.
      * @return bool
+     * @throws Exception
      */
     public function fails(){
         $this->validate();
-        return count($this->errors) != 0;
+        return !empty($this->errors);
+
     }
 
     /**
-     * Affiche seulement les règles validées du tableau passé
+     * Retourne uniquement les champs validés dont le nom est dans $index
      *
      * @param array $index
      *
@@ -370,7 +374,7 @@ class Validator
     }
 
     /**
-     * Affiche toutes les règles validées excepté ceux du tableau passé
+     * Retourne uniquement les champs validés dont le nom n'est pas dans $index
      *
      * @param array $index
      *

@@ -13,7 +13,7 @@ class ReductionService {
 
     private function eligibleReductionPizza(Commande $commande):bool{
         $nbPizzas = 0;
-        foreach ($commande->getQuantityPizza() as $pizza){
+        foreach ($commande->getCommandePizza() as $pizza){
             $nbPizzas += $pizza->nb_pizza;
         }
         return $nbPizzas > self::SEUIL_PIZZA;

@@ -27,12 +27,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($commande->getQuantityPizza() as $pizza): ?>
+                <?php foreach ($commande->getCommandePizza() as $commande_pizza): ?>
                     <tr class="table-row-hover stagger">
-                        <td><?= htmlspecialchars($pizza->libelle)?></td>
-                        <td><?= htmlspecialchars($pizza->prix_unitaire)?></td>
-                        <td><?= htmlspecialchars($pizza->nb_pizza)?></td>
-                        <td><?= htmlspecialchars(number_format($pizza->nb_pizza * $pizza->prix_unitaire,2))?> €</td>
+                        <td><?= htmlspecialchars($commande_pizza->libelle)?></td>
+                        <td><?= htmlspecialchars($commande_pizza->prix_unitaire)?></td>
+                        <td><?= htmlspecialchars($commande_pizza->nb_pizza)?></td>
+                        <td><?= htmlspecialchars(number_format($commande_pizza->nb_pizza * $commande_pizza->prix_unitaire,2))?> €</td>
                     </tr>
                 <?php endforeach;?>
                 </tbody>

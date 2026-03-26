@@ -2,19 +2,19 @@
 
 use App\Helpers\Csrf;
 
-if (isset($commande->id)){
+if (isset($commande->id)) {
     $action = "update";
     $titres = "Modifier la ";
     $actionUri = "/commandes/update/".$commande->id;
     $titreBtn = "Modifier";
-}else{
+} else{
     $action = "create";
     $titres = "Créer une ";
     $actionUri = "/commandes/create";
     $titreBtn = "Créer la commande";
 }
 ?>
-<!--TODO: Penser a faire la partie table pizza -->
+
 <div class="container py-5" style="max-width: 620px;">
 
     <!-- En-tête -->
@@ -71,6 +71,92 @@ if (isset($commande->id)){
 
             <!-- Table Pizzas -->
             <!-- TODO: Table de pizza-->
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                <tr>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Quantité</th>
+                    <th scope="col">Sous-total</th>
+                </tr>
+                </thead>
+                <tbody id="pizza-tbody">
+<!--                    <tr class="repeatLine">-->
+<!--                        <td>-->
+<!--                            <select name="pizzas[0][pizza_id]" class="form-select pizza-select">-->
+<!--                                <option disabled selected>Choisir une pizza</option>-->
+<!--                                <option value="0">Reine</option>-->
+<!--                                <option value="0">Landaise</option>-->
+<!--                            </select>-->
+<!--                        </td>-->
+<!--                        <td>-->
+<!--                            <input type="number" name="pizzas[0][nb_pizza]"-->
+<!--                                   class="form-control qte-input" min="1" value="1" style="width:80px"/>-->
+<!--                        </td>-->
+<!--                        <td class="prix-unitaire">-</td>-->
+<!--                        <td class="sous-total">-</td>-->
+<!--                        <td>-->
+<!--                            <button type="button" class="btn btn-danger btn-sm remove-row">-->
+<!--                                <i class="bi bi-trash-fill"></i>-->
+<!--                            </button>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                    <tr class="repeatLine">-->
+<!--                        <td>-->
+<!--                            <select name="pizzas[1][pizza_id]" class="form-select pizza-select">-->
+<!--                                <option disabled selected>Choisir une pizza</option>-->
+<!--                                <option>Reine</option>-->
+<!--                                <option>Landaise</option>-->
+<!--                            </select>-->
+<!--                        </td>-->
+<!--                        <td>-->
+<!--                            <input type="number" name="pizzas[1][nb_pizza]"-->
+<!--                                   class="form-control qte-input" min="1" value="1" style="width:80px"/>-->
+<!--                        </td>-->
+<!--                        <td class="prix-unitaire">-</td>-->
+<!---->
+<!--                        <td class="sous-total">-</td>-->
+<!--                        <td>-->
+<!--                            <button type="button" class="btn btn-danger btn-sm remove-row">-->
+<!--                                <i class="bi bi-trash-fill"></i>-->
+<!--                            </button>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+                </tbody>
+<!--                <tfoot>-->
+<!--                <tr>-->
+<!--                    <td colspan="3">Total : </td>-->
+<!--                    <td><strong>--><?php //= htmlspecialchars(number_format($commande->montant,2))?><!-- €</strong></td>-->
+<!--                </tr>-->
+<!--                </tfoot>-->
+            </table>
+
+            <!-- Template caché -->
+            <template id="pizza-row-template">
+                <tr class="repeatLine">
+                    <td>
+                        <select name="pizzas[0][pizza_id]" class="form-select pizza-select">
+                            <option disabled selected>Choisir une pizza</option>
+                        </select>
+                    </td>
+                    <td class="prix-unitaire">-</td>
+                    <td>
+                        <input type="number" name="pizzas[INDEX][nb_pizza]"
+                               class="form-control qte-input" min="1" value="1" style="width:80px"/>
+                    </td>
+                    <td class="sous-total">-</td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm remove-row">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </td>
+                </tr>
+            </template>
+
+
+
+            <button type="button" class="btn btn-secondary mt-2" id="add-pizza">
+                <i class="bi bi-plus-circle me-1"></i> Ajouter une pizza
+            </button>
 
             <!-- Montant -->
             <div class="mb-3">
@@ -110,3 +196,4 @@ if (isset($commande->id)){
     </div>
 </div>
 
+<script src="scriptForm.js"/>

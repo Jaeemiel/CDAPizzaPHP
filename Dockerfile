@@ -19,6 +19,7 @@ RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /et
 RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/docker-php-dev.ini \
     && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker-php-dev.ini \
     && echo "html_errors = On" >> /usr/local/etc/php/conf.d/docker-php-dev.ini \
-    && echo "xdebug.mode=develop,debug" >> /usr/local/etc/php/conf.d/docker-php-dev.ini \
+    && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-dev.ini \
     && echo "xdebug.var_display_max_depth=5" >> /usr/local/etc/php/conf.d/docker-php-dev.ini \
     && echo "xdebug.var_display_max_children=256" >> /usr/local/etc/php/conf.d/docker-php-dev.ini \
+    && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini

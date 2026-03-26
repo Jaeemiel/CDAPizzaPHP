@@ -95,7 +95,7 @@ class Commande extends Model{
      *
      * @return Commande_Pizza[]
      */
-    public function getQuantityPizza(){
+    public function getCommandePizza(){
         $targetTable =  "pizza";
         $pivotTable = "commande_pizza";
         $foreignKey = "commande_id";

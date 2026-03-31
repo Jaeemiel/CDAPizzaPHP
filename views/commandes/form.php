@@ -34,12 +34,12 @@ if (isset($commande->id)) {
             <!-- Client -->
             <label class="form-label">Client <span style="color:var(--cyan)">*</span></label>
             <select name="client_id" class="form-select">
-                <option disabled <?= !isset($commande->client_id) ? 'selected' : '' ?>>
+                <option disabled <?= $commande->client_id === null ? 'selected' : '' ?>>
                     Choisir un client
                 </option>
                 <?php foreach ($clients as $client) :?>
                     <option value="<?= $client->id ?>"
-                        <?= (isset($commande->client_id) && $commande->client_id == $client->id) ? 'selected' : '' ?>>
+                        <?= ($commande->client_id !== null && $commande->client_id == $client->id) ? 'selected' : '' ?>>
                         <?= escape($client->nom) ?> <?= escape($client->prenom) ?> Tel: <?= escape($client->telephone)?>
                     </option>
                 <?php endforeach; ?>
@@ -52,7 +52,7 @@ if (isset($commande->id)) {
                     <div class="statut-display">
                         <div class="statut-dot"></div>
                         <span>Défini automatiquement à la création</span>
-                        <span class="<?= $etatDefaut->badge() ?>"><?= $etatDefaut::PAYER->label() ?></span>
+                        <span class="<?= $etatDefaut->badge() ?>"><?= $etatDefaut->label() ?></span>
                     </div>
                     <div class="info-text"><i class="bi bi-info-circle me-1"></i>Le statut pourra être modifié après la création de la tâche.</div>
                 <?php else: ?>
@@ -70,79 +70,39 @@ if (isset($commande->id)) {
             <hr class="form-divider" />
 
             <!-- Table Pizzas -->
-            <!-- TODO: Table de pizza-->
             <table class="table table-hover align-middle mb-0">
                 <thead>
                 <tr>
                     <th scope="col">Nom</th>
                     <th scope="col">Quantité</th>
+                    <th scope="col">Prix unitaire</th>
                     <th scope="col">Sous-total</th>
                 </tr>
                 </thead>
-                <tbody id="pizza-tbody">
-<!--                    <tr class="repeatLine">-->
-<!--                        <td>-->
-<!--                            <select name="pizzas[0][pizza_id]" class="form-select pizza-select">-->
-<!--                                <option disabled selected>Choisir une pizza</option>-->
-<!--                                <option value="0">Reine</option>-->
-<!--                                <option value="0">Landaise</option>-->
-<!--                            </select>-->
-<!--                        </td>-->
-<!--                        <td>-->
-<!--                            <input type="number" name="pizzas[0][nb_pizza]"-->
-<!--                                   class="form-control qte-input" min="1" value="1" style="width:80px"/>-->
-<!--                        </td>-->
-<!--                        <td class="prix-unitaire">-</td>-->
-<!--                        <td class="sous-total">-</td>-->
-<!--                        <td>-->
-<!--                            <button type="button" class="btn btn-danger btn-sm remove-row">-->
-<!--                                <i class="bi bi-trash-fill"></i>-->
-<!--                            </button>-->
-<!--                        </td>-->
-<!--                    </tr>-->
-<!--                    <tr class="repeatLine">-->
-<!--                        <td>-->
-<!--                            <select name="pizzas[1][pizza_id]" class="form-select pizza-select">-->
-<!--                                <option disabled selected>Choisir une pizza</option>-->
-<!--                                <option>Reine</option>-->
-<!--                                <option>Landaise</option>-->
-<!--                            </select>-->
-<!--                        </td>-->
-<!--                        <td>-->
-<!--                            <input type="number" name="pizzas[1][nb_pizza]"-->
-<!--                                   class="form-control qte-input" min="1" value="1" style="width:80px"/>-->
-<!--                        </td>-->
-<!--                        <td class="prix-unitaire">-</td>-->
-<!---->
-<!--                        <td class="sous-total">-</td>-->
-<!--                        <td>-->
-<!--                            <button type="button" class="btn btn-danger btn-sm remove-row">-->
-<!--                                <i class="bi bi-trash-fill"></i>-->
-<!--                            </button>-->
-<!--                        </td>-->
-<!--                    </tr>-->
-                </tbody>
-<!--                <tfoot>-->
-<!--                <tr>-->
-<!--                    <td colspan="3">Total : </td>-->
-<!--                    <td><strong>--><?php //= htmlspecialchars(number_format($commande->montant,2))?><!-- €</strong></td>-->
-<!--                </tr>-->
-<!--                </tfoot>-->
+                <tbody id="pizza-tbody"></tbody>
             </table>
 
             <!-- Template caché -->
             <template id="pizza-row-template">
                 <tr class="repeatLine">
+                    <!-- Choix Pizza -->
                     <td>
-                        <select name="pizzas[0][pizza_id]" class="form-select pizza-select">
+                        <select name="pizzas[INDEX][pizza_id]" class="form-select pizza-select">
                             <option disabled selected>Choisir une pizza</option>
                         </select>
                     </td>
-                    <td class="prix-unitaire">-</td>
+
+                    <!-- Quantité -->
                     <td>
                         <input type="number" name="pizzas[INDEX][nb_pizza]"
-                               class="form-control qte-input" min="1" value="1" style="width:80px"/>
+                               class="form-control qte-input" min="1" value="1" style="width:80px"
+                               oninput="this.value = parseFloat(this.value) || ''"/>
                     </td>
+
+                    <!-- Prix unitaire -->
+                    <td class="prix-unitaire">-</td>
+
+                    <!-- Sous-total -->
                     <td class="sous-total">-</td>
                     <td>
                         <button type="button" class="btn btn-danger btn-sm remove-row">
@@ -152,26 +112,22 @@ if (isset($commande->id)) {
                 </tr>
             </template>
 
-
-
             <button type="button" class="btn btn-secondary mt-2" id="add-pizza">
                 <i class="bi bi-plus-circle me-1"></i> Ajouter une pizza
             </button>
 
-            <!-- Montant -->
+            <!-- Montant aperçu -->
             <div class="mb-3">
-                <label class="form-label">Montant</label>
+                <label class="form-label">Montant estimé</label>
                 <input type="text"
-                       class="form-control"
-                       value="<?= isset($commande->montant) ? escape($commande->montant) . ' €' : '0 €' ?>"
+                       class="form-control totalTTC"
+                       value="0 €"
                        readonly/>
                 <div class="info-text">
                     <i class="bi bi-info-circle me-1"></i>
-                    Calculé automatiquement selon les pizzas commandées.
+                    Aperçu — le montant final sera calculé automatiquement par le serveur.
                 </div>
             </div>
-
-
 
             <hr class="form-divider" />
 
@@ -180,7 +136,7 @@ if (isset($commande->id)) {
                 <label class="form-label">Commentaire</label>
                 <textarea name="commentaire" class="form-control" rows="3"
                           placeholder="Instructions spéciales, allergies..."
-                ><?= isset($commande->commentaire) ? escape($commande->commentaire) : '' ?></textarea>
+                ><?= escape($commande->commentaire ?? '')?></textarea>
             </div>
 
 
@@ -196,4 +152,23 @@ if (isset($commande->id)) {
     </div>
 </div>
 
-<script src="scriptForm.js"/>
+<!-- Données des pizzas disponibles sérialisées en JSON pour le script JS -->
+<script id="pizzas-data" type="application/json">
+    <?= json_encode(array_map(fn($p) => [
+        'id'    => $p->id,
+        'libelle' => $p->libelle,
+        'prix'  => $p->prix,
+    ], $pizzas)) ?>
+</script>
+
+<!-- Pizzas déjà associées à cette commande, pour pré-remplir le formulaire en mode modification -->
+<script id="pizzas-commande" type="application/json">
+    <?= json_encode(isset($pizzasCommande)?array_map(fn($p) => [
+        'pizza_id' => $p->pizza_id,
+        'libelle' => $p->libelle,
+        'prix'  => $p->prix_unitaire,
+        'nb_pizza' => $p->nb_pizza,
+    ], $pizzasCommande):[]) ?>
+</script>
+
+<script src="/js/scriptFormCommande.js"></script>

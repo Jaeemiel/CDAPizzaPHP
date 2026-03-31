@@ -9,6 +9,7 @@ use App\Core\Validator;
 use App\Enum\Etat_commande;
 use App\Models\Client;
 use App\Models\Commande;
+use App\Models\Pizza;
 use App\Services\ReductionService;
 use Exception;
 
@@ -54,9 +55,11 @@ class CommandeController extends Controller{
      * @throws Exception
      */
     public function create() : void{
+
         View::render("commandes.form",[
             "clients"=>(new Client())->findAll(),
             "commande"=>(new Commande()),
+            "pizzas"=>(new Pizza())->findAll(),
             "etats"=>Etat_commande::cases(),
             "etatDefaut"=>Etat_commande::PAYER,
         ]);
@@ -100,8 +103,11 @@ class CommandeController extends Controller{
         }
 
         $commande->save();
+        $commande->syncPizzas($_POST['pizzas']??[]);
 
+        $commande = (new Commande())->find($commande->id);
         $this->applyNotifyDiscount($commande,$client);
+
 
         Session::setFlash("success", "La commande a bien été créé.");
         $this->redirect("/commandes");
@@ -123,13 +129,15 @@ class CommandeController extends Controller{
             $this->redirect("/commandes");
             return;
         }
+        $reduction = new ReductionService();
 
         $etat = Etat_commande::from($commande->etat);
         View::render("commandes.show",[
-            "commande"=>$commande,
-            "etats"=>Etat_commande::cases(),
-            "etat"=>$etat,
-            "etatSuivant"=>$etat->suivant(),
+            "commande" => $commande,
+            "etats" => Etat_commande::cases(),
+            "etat" => $etat,
+            "etatSuivant" => $etat->suivant(),
+            "reductions" => $reduction->getReductions($commande, $commande->client())
         ]);
 
     }
@@ -153,9 +161,11 @@ class CommandeController extends Controller{
 
         $clients = (new Client())->findAll();
         View::render("commandes.form",[
-            "commande"=>$commande,
-            "clients"=>$clients,
-            "etats"=>Etat_commande::cases(),
+            "commande" => $commande,
+            "clients" => $clients,
+            "pizzas" => (new Pizza())->findAll(),
+            "pizzasCommande" => $commande->getCommandePizza(),
+            "etats" => Etat_commande::cases(),
         ]);
     }
 

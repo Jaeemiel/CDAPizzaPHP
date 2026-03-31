@@ -129,11 +129,12 @@ class Commande extends Model{
                 $stmt = $this->pdo->prepare($sql);
 
                 foreach ($pizzas as $pizza) {
+                    $pizzaModel = (new Pizza())->find($pizza["pizza_id"]);
                     $stmt->execute([
                         "commande_id"  => $this->id,
                         "pizza_id"     => $pizza["pizza_id"],
                         "nb_pizza"     => $pizza["nb_pizza"],
-                        "prix_unitaire"=> $pizza["prix_unitaire"],
+                        "prix_unitaire"=> $pizzaModel->prix,
                     ]);
                 }
             }

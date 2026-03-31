@@ -1,9 +1,32 @@
 "use strict"
+
+/**
+ * Représente la table de pizzas
+ * @type {Array<{id: number, libelle: string, prix: number}>}
+ */
 const pizzas = JSON.parse(document.getElementById('pizzas-data').textContent);
+
+/**
+ * Représente la table de pizzasCommande
+ * @type {Array<{pizza_id: number, libelle: string, prix: number, nb_pizza: number}>}
+ */
+const pizzasCommande = JSON.parse(document.getElementById('pizzas-commande').textContent);
+
+/**
+ * Compteur pour les index des lignes du tableau
+ * @type {number}
+ */
 let index = 0;
-////////////////////////////////
-// Add / Delete / Clear Lines //
-////////////////////////////////
+
+//////////////////
+// Add / Delete //
+//////////////////
+
+/**
+ * Ajoute une nouvelle ligne de pizza dans le tableau.
+ * Clone le template, peuple le select avec les pizzas disponibles,
+ * attache les évènements et met à jour le total.
+ */
 function addLine(){
     const tbody = document.querySelector('tbody');
     const template = document.getElementById('pizza-row-template').content;
@@ -16,11 +39,9 @@ function addLine(){
         const option = document.createElement('option');
         option.value = p.id;
         option.dataset.prix = p.prix;
-        option.textContent =p.libelle;
+        option.textContent = p.libelle;
         select.appendChild(option);
     })
-
-    // clearLine(newRow, {showToast: false});
 
     tbody.appendChild(newRow);
     attachRowEvents(newRow);  // Attach listeners for new row
@@ -28,45 +49,25 @@ function addLine(){
     updateTotal();
 }
 
-function getDeleteType(nbAvant){
-    return nbAvant === 1
-        ? "danger"
-        : "warning";
-}
-
-function getDeleteMessage(nbAvant) {
-    return nbAvant === 1
-        ? "La der des der ligne a été supprimée."
-        : "La dernière ligne a été supprimée.";
-}
-
+/**
+ * Supprime une ligne du tableau et met à jour le total.
+ *
+ * @param {HTMLTableRowElement} row - La ligne à supprimer
+ */
 function deleteLine(row){
-    const rows = document.querySelectorAll('.repeatLine');
-    const nbLignesAvant = rows.length;
-
     row.remove();
     updateTotal();
-
-    const message = getDeleteMessage(nbLignesAvant);
-    const type = getDeleteType(nbLignesAvant);
-    showPopup(message,type);
-}
-
-function deleteLastLine(){
-    const rows= document.querySelectorAll('.repeatLine');
-
-    if(rows.length === 0){
-        showPopup("Il n'y a plus de ligne à supprimer","info");
-        return;
-    }
-
-    const lastRow = rows[rows.length-1];
-    deleteLine(lastRow);
 }
 
 ////////////
 // CALCUL //
 ////////////
+
+/**
+* Calcule et met à jour le prix unitaire et le sous-total d'une ligne
+* en fonction de la pizza sélectionnée et de la quantité saisie.
+* @param {HTMLTableRowElement} row - La ligne à calculer
+*/
 function calculateRow(row) {
     const select = row.querySelector('.pizza-select');
     const prix = parseFloat(select.selectedOptions[0]?.dataset.prix) || 0;
@@ -76,43 +77,30 @@ function calculateRow(row) {
     row.querySelector('.sous-total').textContent = (prix*qte).toFixed(2)+ ' €';
 }
 
+/**
+ * Calcule et met à jour le montant total estimé
+ * en additionnant tous les sous-totaux des lignes.
+ */
 function updateTotal(){
     const sousTotaux = [...document.querySelectorAll('.sous-total')]
         .map(td=>parseFloat(td.textContent)||0);
-    const total = sousTotaux.reduce((acc,val)=>acc+val,0);
+    const total = sousTotaux.reduce((acc,val)=>acc+val,0); //acc = accumulator
 
     document.querySelector('.totalTTC').value = total.toFixed(2);
 }
 
 ///////////////////
-// POPUP MESSAGE //
-///////////////////
-let popupTimeout;
-function showPopup(message, type){
-    const popupMessage =document.getElementById('popupMessage');
-    const popup = document.getElementById('popup');
-
-    popup.classList.remove('popup--success',
-        'popup--warning',
-        'popup--danger',
-        'popup--info'
-    );
-
-    popup.classList.add(`popup--${type}`)
-
-
-    popupMessage.textContent = message;
-    popup.classList.add('active');
-
-    clearTimeout(popupTimeout);
-    popupTimeout = setTimeout(() => {
-        popup.classList.remove('active');
-    }, 1200);
-}
-
-///////////////////
 // EVENT BY LINE //
 ///////////////////
+
+/**
+ * Attache les écouteurs d'événements sur une ligne :
+ * - Changement de pizza → recalcul
+ * - Changement de quantité → recalcul
+ * - Clic sur supprimer → suppression de la ligne
+ *
+ * @param {HTMLTableRowElement} row - La ligne sur laquelle attacher les événements
+ */
 function attachRowEvents(row) {
 
     row.querySelector('.pizza-select').addEventListener('change', () => {
@@ -137,9 +125,19 @@ function attachRowEvents(row) {
 // DOM CONTENT LOADED //
 ////////////////////////
 document.addEventListener('DOMContentLoaded', () => {
+    // Pour pré-remplir mode update
+    if(pizzasCommande.length >0){
+        pizzasCommande.forEach(p=>{
+            addLine();
+            const lastRow = document.querySelector('.repeatLine:last-child');
+            lastRow.querySelector('.pizza-select').value = p.pizza_id;
+            lastRow.querySelector('.qte-input').value = p.nb_pizza;
+            calculateRow(lastRow);
+        });
+    }
+
     document.querySelector('#add-pizza').addEventListener('click', () => {
         addLine();
-        showPopup("Une ligne a été ajouté.","success");
     });
 
     updateTotal();  // Initial total

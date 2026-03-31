@@ -43,7 +43,6 @@ class PizzaController extends Controller
             "libelle" => "required",
             "ingredients"=>"required",
             "prix"=>"required",
-            "en_stock"=>"required",
         ]);
 
         if($validator->fails()){
@@ -60,7 +59,7 @@ class PizzaController extends Controller
         }
 
         $validate = $validator->validated;
-
+        $validate['en_stock'] = (int)($_POST['en_stock'] ?? 0);
         $pizza = new Pizza();
         $pizza->fill($validate);
 
@@ -114,7 +113,6 @@ class PizzaController extends Controller
             "libelle" => "required",
             "ingredients"=>"required",
             "prix"=>"required",
-            "en_stock"=>"required",
         ]);
 
         if($validator->fails()){
@@ -132,7 +130,7 @@ class PizzaController extends Controller
         }
 
         $validate = $validator->validated;
-
+        $validate['en_stock'] = (int)($_POST['en_stock'] ?? 0);
         $pizza->fill($validate);
 
         $pizza->save();
@@ -180,8 +178,7 @@ class PizzaController extends Controller
             return;
         }
 
-        $pizza->deleted_at = date('Y-m-d H:i:s');
-        $pizza->save();
+        $pizza->softDelete();
 
         Session::setFlash("danger", "La pizza a bien été supprimé.");
         $this->redirect("/pizzas");

@@ -12,6 +12,8 @@
  class Pizza extends Model {
      use HasRelationships;
 
+     protected bool $softDeletable = true;
+
      /**
       * Clé primaire
       * @var ?int
@@ -26,7 +28,7 @@
 
      /**
       * Ingrédients de la pizza sous forme de texte libre
-      * @var string
+      * @var string|null
       */
      public ?string $ingredients = null;
 
@@ -38,9 +40,10 @@
 
      /**
       * Représente si la pizza est en stock ou non
-      * @var bool
+      * 1 oui, 0 non
+      * @var int
       */
-     public bool $en_stock = true;
+     public int $en_stock = 1;
 
 
      /** Date de création @var string|null */
@@ -65,8 +68,6 @@
          "en_stock",
      ];
 
-
-
      /**
       * Commandes associées à cet pizza.
       *
@@ -74,5 +75,10 @@
       */
      public function commandes(){
          return $this->belongsToMany(Commande::class, "commande_pizza");
+     }
+
+     public function findAvailable(): array {
+         $sql = "SELECT * FROM {$this->getNameTable()} WHERE deleted_at IS NULL AND en_stock = 1";
+         return $this->readQuery($sql);
      }
  }

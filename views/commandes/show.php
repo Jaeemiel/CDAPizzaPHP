@@ -15,7 +15,9 @@
             <!-- Infos commande -->
             <p><strong>Client :</strong> <?= htmlspecialchars($commande->client()->nom) ?> <?= htmlspecialchars($commande->client()->prenom) ?></p>
             <p><strong>Date :</strong> <?= htmlspecialchars($commande->created_at) ?></p>
-
+            <?php foreach ($reductions as $reduction):?>
+                <span class="badge bg-success"><?= $reduction->label() ?></span>
+            <?php endforeach;?>
             <!-- Pizzas -->
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-dark">

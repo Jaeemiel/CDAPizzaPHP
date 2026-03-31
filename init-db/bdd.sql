@@ -82,11 +82,17 @@ FOR EACH ROW
 
 DELIMITER ;
 
--- ⚠ ATTENTION : pas de trigger AFTER DELETE sur commande_pizza
--- Si une ligne est supprimée directement (DELETE FROM commande_pizza),
--- le montant de la commande ne sera PAS recalculé automatiquement.
--- Toute suppression doit passer par un UPDATE (nb_pizza = 0 ou remplacement)
--- ou alors ajouter le trigger DELETE ci-dessous.
+DELIMITER $$
+
+CREATE TRIGGER trg_calcule_montant_after_delete
+AFTER DELETE ON commande_pizza
+FOR EACH ROW
+    BEGIN
+        UPDATE commande SET montant = montant - (OLD.nb_pizza * OLD.prix_unitaire) WHERE id = OLD.commande_id;
+    END$$
+
+DELIMITER ;
+
 
 -- ================================================
 -- BASE PERSONNEL

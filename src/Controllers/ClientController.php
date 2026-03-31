@@ -12,7 +12,7 @@ use Exception;
 class ClientController extends Controller{
 
     /**
-     * Liste toutes les clients
+     * Liste tous les clients
      * @return void
      * @throws Exception
      */
@@ -150,7 +150,7 @@ class ClientController extends Controller{
     }
 
     /**
-     * Page de la commande
+     * Page du client
      *
      * @param mixed $id
      * @return void
@@ -172,7 +172,6 @@ class ClientController extends Controller{
 
     }
 
-
     /**
      * Soft delete de client
      * @param mixed $id
@@ -189,13 +188,11 @@ class ClientController extends Controller{
             return;
         }
 
-        $client->deleted_at = date('Y-m-d H:i:s');
-        $client->save();
+        $client->softDelete();
 
         Session::setFlash("danger", "Le client a bien été supprimé.");
         $this->redirect("/clients");
 
     }
-
 
 }

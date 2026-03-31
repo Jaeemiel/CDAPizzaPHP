@@ -6,7 +6,7 @@ use App\Core\Controller;
 use App\Core\Session;
 use App\Core\View;
 use App\Core\Validator;
-use App\Enum\Etat_commande;
+use App\Enum\EtatCommande;
 use App\Models\Client;
 use App\Models\Commande;
 use App\Models\Pizza;
@@ -23,7 +23,7 @@ class CommandeController extends Controller{
     public function index() : void{
         $commandes = (new Commande())->findAll();
         $etatsCommandes = array_map(
-            fn($c) => Etat_commande::from($c->etat),
+            fn($c) => EtatCommande::from($c->etat),
             $commandes
         );
 
@@ -45,7 +45,12 @@ class CommandeController extends Controller{
         $reductions = $reductionService->appliqueReductions($commande, $client);
 
         if (!empty($reductions)) {
-            Session::setFlash("info", "Réductions appliquées : " . implode(", ", $reductions));
+            $last = count($reductions)-1;
+            $message = "Reductions appliquées: ";
+            foreach ($reductions as $i=>$reduction){
+                $message .= $reduction->label().(($i < $last) ? ", ": ".");
+            }
+            Session::setFlash("info", $message);
         }
     }
 
@@ -60,8 +65,8 @@ class CommandeController extends Controller{
             "clients"=>(new Client())->findAll(),
             "commande"=>(new Commande()),
             "pizzas"=>(new Pizza())->findAll(),
-            "etats"=>Etat_commande::cases(),
-            "etatDefaut"=>Etat_commande::PAYER,
+            "etats"=>EtatCommande::cases(),
+            "etatDefaut"=>EtatCommande::PAYER,
         ]);
     }
 
@@ -91,8 +96,10 @@ class CommandeController extends Controller{
         }
 
         $validate = $validator->validated;
-
+        $validate['commentaire'] = (!empty($_POST['commentaire']) ? $_POST['commentaire'] : null);
+        $validate['etat'] = EtatCommande::PAYER->value;
         $commande = new Commande();
+
         $commande->fill($validate);
         $client = (new Client())->find($commande->client_id);
 
@@ -131,10 +138,10 @@ class CommandeController extends Controller{
         }
         $reduction = new ReductionService();
 
-        $etat = Etat_commande::from($commande->etat);
+        $etat = EtatCommande::from($commande->etat);
         View::render("commandes.show",[
             "commande" => $commande,
-            "etats" => Etat_commande::cases(),
+            "etats" => EtatCommande::cases(),
             "etat" => $etat,
             "etatSuivant" => $etat->suivant(),
             "reductions" => $reduction->getReductions($commande, $commande->client())
@@ -165,7 +172,7 @@ class CommandeController extends Controller{
             "clients" => $clients,
             "pizzas" => (new Pizza())->findAll(),
             "pizzasCommande" => $commande->getCommandePizza(),
-            "etats" => Etat_commande::cases(),
+            "etats" => EtatCommande::cases(),
         ]);
     }
 
@@ -187,7 +194,7 @@ class CommandeController extends Controller{
             return;
         }
 
-        $etat = Etat_commande::from($commande->etat);
+        $etat = EtatCommande::from($commande->etat);
         $etatSuivant = $etat->suivant();
 
         if ($etatSuivant === null) {
@@ -241,7 +248,8 @@ class CommandeController extends Controller{
         }
 
         $validate = $validator->validated;
-
+        $validate['commentaire'] = (!empty($_POST['commentaire']) ? $_POST['commentaire'] : null);
+        $validate['etat'] = (!empty($_POST['etat']) ? $_POST['etat'] : EtatCommande::PAYER);
         $commande->fill($validate);
         $client = (new Client())->find($commande->client_id);
         if ($client === null) {
@@ -263,16 +271,28 @@ class CommandeController extends Controller{
     }
 
 
-//    /**
-//     * Page du formulaire de création : POST
-//     * @return void
-//     * @throws Exception
-//     */
-//    public function delete (mixed $id) : void {
-//        $id = intval($id);
-//        $commande = (new Commande())->find($id);
-//
-//    }
+    /**
+     * Supprime une commande
+     * @param mixed $id
+     * @return void
+     */
+    public function delete(mixed $id): void
+    {
+        $id = intval($id);
+        $commande = (new Commande())->find($id);
+
+        if ($commande === null) {
+            Session::setFlash("danger", "Commande introuvable.");
+            $this->redirect("/commandes");
+            return;
+        }
+
+        $commande->syncPizzas([]);
+        $commande->delete($id);
+
+        Session::setFlash("danger", "La commande a bien été supprimée.");
+        $this->redirect("/commandes");
+    }
 
 
 

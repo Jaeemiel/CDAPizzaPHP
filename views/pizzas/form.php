@@ -48,12 +48,14 @@ if (isset($pizza->id)){
                 <label class="form-label">Prix</label>
                 <input type="number" class="form-control" name="prix" step="any" min="0"
                        value="<?= isset($pizza->prix) ? escape((float)$pizza->prix): '' ?>"
-                       oninput="this.value = parseFloat(this.value) || ''"/>
+                       />
             </div>
             <hr class="form-divider" />
 
             <!-- En stock -->
             <div class="form-check">
+                <!-- Pour que le champ soit envoyé dans le $_POST -->
+                <input type="hidden" name="en_stock" value="0" />
                 <input type="checkbox" class="form-check-input" name="en_stock" value="1"
                     <?= isset($pizza->en_stock) && $pizza->en_stock ? 'checked' : '' ?>>
                 <label class="form-check-label">En stock</label>

@@ -3,7 +3,7 @@
 namespace App\Models;
 use App\Core\Model;
 use App\Core\Traits\HasRelationships;
-use App\Enum\Etat_commande;
+use App\Enum\EtatCommande;
 
 
 /**
@@ -28,7 +28,7 @@ class Commande extends Model{
 
     /**
      * Etat de la commande
-     * @see Etat_commande
+     * @see EtatCommande
      * @var string
      */
     public string $etat = "";
@@ -58,8 +58,9 @@ class Commande extends Model{
      * @var string[]
      */
     public array $fillable = [
-        "commentaire",
         "client_id",
+        "commentaire",
+        "etat",
     ];
 
     /**

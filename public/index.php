@@ -5,6 +5,12 @@
 
 require_once (dirname(__DIR__) ."/autoloader.php");
 require_once (dirname(__DIR__) ."/src/Helpers/functions.php");
+
+/**
+ * Pour mettre la BDD sur mon fuseau horaire.
+ */
+date_default_timezone_set('Europe/Paris');
+
 use App\Core\Session;
 use App\Core\Wizardvalidator;
 \App\Core\Session::getInstance();
@@ -35,6 +41,10 @@ $router
     ->get("/commandes/update/{id}", App\Controllers\CommandeController::class . "::edit")
     ->post("/commandes/update/{id}", App\Controllers\CommandeController::class . "::update")
     ->get("/commandes/show/{id}", App\Controllers\CommandeController::class ."::show")
+    ->post("/commandes/{id}/etat", App\Controllers\CommandeController::class . "::updateEtat")
+    ->post("/commandes/delete/{id}", App\Controllers\CommandeController::class ."::delete")
+
+
 
     ->get("/clients",App\Controllers\ClientController::class. "::index")
     ->get("/clients/create", App\Controllers\ClientController::class . "::create")
@@ -42,11 +52,9 @@ $router
     ->get("/clients/update/{id}", App\Controllers\ClientController::class . "::edit")
     ->post("/clients/update/{id}", App\Controllers\ClientController::class . "::update")
     ->get("/clients/show/{id}", App\Controllers\ClientController::class ."::show")
-    ->post("/clients/delete/{id}", App\Controllers\ClientController::class . "::delete")
+    ->post("/clients/delete/{id}", App\Controllers\ClientController::class ."::delete")
 
 
-    ->get("/commandes/delete/{id}", App\Controllers\CommandeController::class ."::delete")
-    ->post("/commandes/{id}/etat", App\Controllers\CommandeController::class . "::updateEtat")
 
     ->get("/pizzas",App\Controllers\PizzaController::class. "::index")
     ->get("/pizzas/create", App\Controllers\PizzaController::class . "::create")

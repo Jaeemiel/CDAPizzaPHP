@@ -27,6 +27,25 @@ class Model {
      */
     protected ?PDO $pdo;
 
+    /**
+     * Colonne utilisée pour le soft delete
+     * @var string
+     */
+    protected string $softDeleteColumn = "deleted_at";
+
+    /**
+     * Valeur à insérer lors du soft delete
+     * Si null, utilise la date et l'heure actuelles
+     * @var mixed
+     */
+    protected mixed $softDeleteValue = null;
+
+    /**
+     * Indique si le modèle supporte le soft delete
+     * Si true, findAll() exclut les enregistrements soft deletés
+     * @var bool
+     */
+    protected bool $softDeletable = false;
 
     /**
      * Initialise la connexion PDO et définit le nom de la table
@@ -44,13 +63,16 @@ class Model {
      */
     public function findAll():array{
         $sql = "SELECT * FROM {$this->getNameTable()}";
+        if ($this->softDeletable) {
+            $sql .= " WHERE {$this->softDeleteColumn} IS NULL";
+        }
         return $this->readQuery($sql);
     }
 
     /**
      * Pointe et récupère un enregistrement d'une table
      * @param int $id
-     * @return array
+     * @return static|null
      */
     public function find(int $id){
         $sql = "SELECT * FROM " . $this->getNameTable() . " WHERE id = :id";
@@ -91,6 +113,22 @@ class Model {
     public function delete($id):bool{
         $sql = "DELETE FROM {$this->getNameTable()} WHERE id = :id";
         return $this->writeQuery($sql, ["id" => $id]);
+    }
+
+    /**
+     * Effectue un soft delete de l'enregistrement courant
+     * en renseignant la colonne définie par $softDeleteColumn avec la valeur définie par $softDeleteValue.
+     * Par défaut utilise la date et l'heure actuelles.
+     * L'enregistrement n'est pas supprimé de la base de données.
+     * @return bool True si la mise à jour a réussi, false sinon
+     */
+    public function softDelete(): bool {
+        $value = $this->softDeleteValue ?? date('Y-m-d H:i:s');
+        $sql = "UPDATE {$this->getNameTable()} SET {$this->softDeleteColumn} = :{$this->softDeleteColumn} WHERE id = :id";
+        return $this->writeQuery($sql, [
+            $this->softDeleteColumn => $value,
+            "id" => $this->id,
+        ]);
     }
 
     /**

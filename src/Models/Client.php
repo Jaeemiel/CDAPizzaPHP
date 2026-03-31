@@ -13,6 +13,8 @@ class Client extends Model
 {
     use HasRelationships;
 
+    protected bool $softDeletable = true;
+
     /**
      * Clé primaire
      * @var ?int

@@ -39,7 +39,8 @@ if (isset($commande->id)) {
                 </option>
                 <?php foreach ($clients as $client) :?>
                     <option value="<?= $client->id ?>"
-                        <?= ($commande->client_id !== null && $commande->client_id == $client->id) ? 'selected' : '' ?>>
+                        <?= ($clientId !== null && $clientId == $client->id) ||
+                        ($commande->client_id !== null && $commande->client_id == $client->id) ? 'selected' : '' ?>>
                         <?= escape($client->nom) ?> <?= escape($client->prenom) ?> Tel: <?= escape($client->telephone)?>
                     </option>
                 <?php endforeach; ?>

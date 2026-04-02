@@ -163,6 +163,25 @@ class PizzaController extends Controller
 
     }
 
+    public function updateStock(mixed $id): void
+    {
+        $id = intval($id);
+        $pizza = (new Pizza())->find($id);
+
+        if ($pizza === null) {
+            Session::setFlash("danger", "Pizza introuvable.");
+            $this->redirect("/pizzas");
+            return;
+        }
+
+        $pizza->en_stock = $pizza->en_stock ? 0 : 1;
+        $pizza->save();
+
+        Session::setFlash("success", "Stock mis à jour.");
+        $this->redirect("/pizzas");
+    }
+
+
     /**
      * Soft delete de pizza
      * @param mixed $id

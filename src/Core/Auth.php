@@ -2,10 +2,10 @@
 
 namespace App\Core;
 
-use App\Models\Pizza;
+use App\Models\Utilisateur;
 
 class Auth{
-    public static ?Pizza $user = null;
+    public static ?Utilisateur $user = null;
 
     public static function check(): bool{
         return Session::has('user');
@@ -13,7 +13,7 @@ class Auth{
 
     public static function user(){
         if (!self::$user) {
-            self::$user = (new Pizza())->find(self::id());
+            self::$user = (new Utilisateur())->find(self::id());
             return self::$user;
         }
         return self::$user;
@@ -27,10 +27,11 @@ class Auth{
     }
 
     public static function attempt($validated): void{
-        $user = (new Pizza())->findBy("email", $validated["email"], true);
+        $user = (new Utilisateur())->findBy("login", $validated["login"], true);
         if ($user) {
             if (password_verify($validated["password"], $user->password)) {
                 self::login($user);
+                return;
             }
         }
         Session::setFlash("error", "combo mail/mdp erroné !");
@@ -38,10 +39,10 @@ class Auth{
         exit;
     }
 
-    public static function login(Pizza $user): void{
+    public static function login(Utilisateur $user): void{
         Session::setUser($user->id);
         Session::setFlash("success", "Connexion réussie");
-        header("location: /tache");
+        header("location: /commandes");
         exit;
     }
 

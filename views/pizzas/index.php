@@ -1,7 +1,11 @@
-<?php //use App\Helpers\Csrf; ?>
+<?php
+use App\Helpers\Csrf;
+use App\Core\Auth;
+?>
 <div class="container py-5">
     <h1 class="text-center mb-4 fw-bold animate-fade-in">Liste des pizzas</h1>
-
+    <?php if (Auth::check()): ?>
+    <?php $role = Auth::user()->role; ?>
     <div class="card mx-auto shadow-lg animate-fade-in" style="max-width: 1200px; border-radius: 1rem; background: linear-gradient(145deg, #f8f9fa, #e9ecef);">
         <div class="card-body p-4">
             <div class="table-responsive">
@@ -19,23 +23,25 @@
                     <?php foreach ($pizzas as $index => $pizza) : ?>
                         <tr class="table-row-hover stagger" style="animation-delay: <?= $index * 0.08 ?>s;">
                             <th scope="row"><?= $pizza->id ?></th>
-                            <td><?= htmlspecialchars($pizza->libelle) ?></td>
-                            <td><?= htmlspecialchars($pizza->prix) ?></td>
-                            <td><?= htmlspecialchars($pizza->en_stock ? 'Oui' : 'Non') ?></td>
+                            <td><?= escape($pizza->libelle) ?></td>
+                            <td><?= escape($pizza->prix) ?></td>
+                            <td><?= escape($pizza->en_stock ? 'Oui' : 'Non') ?></td>
                             <td>
                                 <a href="/pizzas/show/<?=$pizza->id?>" class="btn btn-success btn-gradient btn-sm me-2">
                                     <i class="bi bi-eye-fill me-1"></i>Show
                                 </a>
+                                <?php if($role==='GERANT'):?>
                                 <a href="/pizzas/update/<?=$pizza->id?>" class="btn btn-warning btn-gradient-warning btn-sm me-2">
                                     <i class="bi bi-pencil-fill me-1"></i>Update
                                 </a>
                                 <form action="/pizzas/delete/<?= $pizza->id ?>" method="POST" class="d-inline"
                                       onsubmit="return confirm('Supprimer cette pizza ?')">
-<!--                                    --><?php //= Csrf::field() ?>
+                                    <?= Csrf::field() ?>
                                     <button type="submit" class="btn btn-danger btn-gradient-danger btn-sm">
                                         <i class="bi bi-trash-fill me-1"></i>Delete
                                     </button>
                                 </form>
+                                <?php endif;?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -44,4 +50,5 @@
             </div>
         </div>
     </div>
+    <?php endif;?>
 </div>

@@ -62,13 +62,18 @@ class CommandeController extends Controller{
     public function create() : void{
 
         View::render("commandes.form",[
-            "clients"=>(new Client())->findAll(),
-            "commande"=>(new Commande()),
-            "pizzas"=>(new Pizza())->findAll(),
-            "etats"=>EtatCommande::cases(),
-            "etatDefaut"=>EtatCommande::PAYER,
+            "clients" => (new Client())->findAll(),
+            "clientId" => $_GET['client_id'] ?? null, // ← présélection
+            "commande" => (new Commande()),
+            "pizzas" => (new Pizza())->findAvailable(),
+            "etats" => EtatCommande::cases(),
+            "etatDefaut" => EtatCommande::PAYER,
         ]);
     }
+
+    //TODO: Prendre en compte la reduction et
+    // pk pas changer la base de données de commande avec un montant initial et
+    // montant final qui est si reduc calcul de montant * reduc sinon montant
 
     /**
      * Page du formulaire de création : POST
@@ -98,6 +103,7 @@ class CommandeController extends Controller{
         $validate = $validator->validated;
         $validate['commentaire'] = (!empty($_POST['commentaire']) ? $_POST['commentaire'] : null);
         $validate['etat'] = EtatCommande::PAYER->value;
+        $validate['montant_final'] = null;
         $commande = new Commande();
 
         $commande->fill($validate);
@@ -170,7 +176,8 @@ class CommandeController extends Controller{
         View::render("commandes.form",[
             "commande" => $commande,
             "clients" => $clients,
-            "pizzas" => (new Pizza())->findAll(),
+            "clientId" => null,
+            "pizzas" => (new Pizza())->findAvailable(),
             "pizzasCommande" => $commande->getCommandePizza(),
             "etats" => EtatCommande::cases(),
         ]);
@@ -249,7 +256,8 @@ class CommandeController extends Controller{
 
         $validate = $validator->validated;
         $validate['commentaire'] = (!empty($_POST['commentaire']) ? $_POST['commentaire'] : null);
-        $validate['etat'] = (!empty($_POST['etat']) ? $_POST['etat'] : EtatCommande::PAYER);
+        $validate['etat'] = (!empty($_POST['etat']) ? $_POST['etat'] : EtatCommande::PAYER->value);
+        $validate['montant_final'] = null;
         $commande->fill($validate);
         $client = (new Client())->find($commande->client_id);
         if ($client === null) {

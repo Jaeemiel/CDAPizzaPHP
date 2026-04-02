@@ -10,6 +10,10 @@ USE CDAPizza;
  DROP TABLE IF EXISTS pizza;
  DROP TABLE IF EXISTS client;
 
+DROP TRIGGER IF EXISTS trg_calcule_montant_after_insert;
+DROP TRIGGER IF EXISTS trg_calcule_montant_after_update;
+DROP TRIGGER IF EXISTS trg_calcule_montant_after_delete;
+
 
 -- Maj traçabilité : Client, Pizza, Utilisateur
 -- Maj table client pseudo -> nom, prénom
@@ -40,7 +44,8 @@ CREATE TABLE IF NOT EXISTS pizza(
 -- maj date_heure -> created_at
 CREATE TABLE IF NOT EXISTS commande(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    montant DECIMAL(10,2) NOT NULL DEFAULT 0, -- 10 = nb de chiffre total
+    montant_initial DECIMAL(10,2) NOT NULL DEFAULT 0, -- 10 = nb de chiffre total
+    montant_final DECIMAL(10,2) DEFAULT NULL, -- 10 = nb de chiffre total
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     etat ENUM('PAYER', 'PREPARATION', 'PRETE','LIVRER') DEFAULT 'PAYER',
     commentaire TEXT,
@@ -62,33 +67,33 @@ CREATE TABLE IF NOT EXISTS commande_pizza(
 
 DELIMITER $$
 
-CREATE TRIGGER trg_calcule_montant_after_insert
+CREATE TRIGGER trg_calcule_montant_initial_after_insert
 AFTER INSERT ON commande_pizza
 FOR EACH ROW
     BEGIN
-        UPDATE commande set montant = montant + (NEW.nb_pizza * New.prix_unitaire) where id = NEW.commande_id;
+        UPDATE commande set montant_initial = montant_initial + (NEW.nb_pizza * New.prix_unitaire) where id = NEW.commande_id;
     END$$
 
 DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER trg_calcule_montant_after_update
+CREATE TRIGGER trg_calcule_montant_initial_after_update
 AFTER Update ON commande_pizza
 FOR EACH ROW
     BEGIN
-        UPDATE commande set montant = montant - (OLD.nb_pizza * OLD.prix_unitaire) + (NEW.nb_pizza * NEW.prix_unitaire) where id = NEW.commande_id;
+        UPDATE commande set montant_initial = montant_initial - (OLD.nb_pizza * OLD.prix_unitaire) + (NEW.nb_pizza * NEW.prix_unitaire) where id = NEW.commande_id;
     END$$
 
 DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER trg_calcule_montant_after_delete
+CREATE TRIGGER trg_calcule_montant_initial_after_delete
 AFTER DELETE ON commande_pizza
 FOR EACH ROW
     BEGIN
-        UPDATE commande SET montant = montant - (OLD.nb_pizza * OLD.prix_unitaire) WHERE id = OLD.commande_id;
+        UPDATE commande SET montant_initial = montant_initial - (OLD.nb_pizza * OLD.prix_unitaire) WHERE id = OLD.commande_id;
     END$$
 
 DELIMITER ;

@@ -71,8 +71,7 @@ class ClientController extends Controller{
 
         // Redirection vers la création de commande car le client
         // est créé dans le flux de création de commande
-        $this->redirect("/commandes/create");
-
+        $this->redirect("/commandes/create?client_id=" . $client->id);
     }
 
 

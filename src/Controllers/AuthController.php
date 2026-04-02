@@ -4,8 +4,8 @@ namespace App\Controllers;
 
 use App\Core\Auth;
 use App\Core\Controller;
+use App\Core\Validator;
 use App\Core\View;
-use App\Core\WizardValidator;
 
 class AuthController extends Controller
 {
@@ -16,18 +16,25 @@ class AuthController extends Controller
 
     public function attemptLogin(): void
     {
-        $validator = new WizardValidator($_POST, [
-            "email" => "required",
+        $validator = new Validator($_POST, [
+            "login" => "required",
             "password" => "required",
         ]);
 
         if ($validator->fails()){
-            # gestion des erreurs
-            var_dump($validator->errors());
-            die("ERROR");
+//            var_dump($validator->errors);
+            foreach ($validator->errors as $typeError) {
+//                var_dump($typeError);
+                foreach ($typeError as $error) {
+//                    var_dump($error['message']);
+                    Session::setFlash("danger", $error['message']);
+                    $this->redirect("/login");
+                    return;
+                }
+            }
         }
-        $validated = $validator->validated();
-        Auth::attempt($validated);
+        $validate = $validator->validated;
+        Auth::attempt($validate);
 
     }
 

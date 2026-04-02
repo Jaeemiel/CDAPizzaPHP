@@ -82,14 +82,14 @@ class ReductionService {
      * @throws Exception
      */
     public function appliqueReductions (Commande $commande, Client $client) : array{
-        $montant = $commande->montant;
+        $montant = $commande->montant_initial;
         $reductions = $this->getReductions($commande,$client);
 
         foreach ($reductions as $reduction){
             $montant = $montant * (1 - $reduction->remise());
         }
 
-        $commande->montant = round($montant,2);
+        $commande->montant_final = round($montant,2);
         $commande->save();
 
         return $reductions;

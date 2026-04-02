@@ -34,10 +34,16 @@ class Commande extends Model{
     public string $etat = "";
 
     /**
-     * Montant de la commande
+     * Montant initial de la commande
      * @var float
      */
-    public float $montant = 0;
+    public float $montant_initial = 0;
+
+    /**
+     * Montant final de la commande
+     * @var float | null
+     */
+    public ?float $montant_final = null;
 
     /**
      * Commentaire de la commande
@@ -61,6 +67,7 @@ class Commande extends Model{
         "client_id",
         "commentaire",
         "etat",
+        "montant_final",
     ];
 
     /**

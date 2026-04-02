@@ -10,14 +10,14 @@
 
 
             <!-- Infos client -->
-            <p><strong>Nom :</strong> <?= htmlspecialchars($client->nom) ?> </p>
-            <p><strong>Prénom :</strong> <?= htmlspecialchars($client->prenom) ?></p>
-            <p><strong>Téléphone :</strong> <?= htmlspecialchars($client->telephone) ?></p>
+            <p><strong>Nom :</strong> <?= escape($client->nom) ?> </p>
+            <p><strong>Prénom :</strong> <?= escape($client->prenom) ?></p>
+            <p><strong>Téléphone :</strong> <?= escape($client->telephone) ?></p>
             <p>
                 <strong>Adresse :</strong>
-                <?= htmlspecialchars($client->rue) ?>,
-                <?= htmlspecialchars($client->code_postal) ?>,
-                <?= htmlspecialchars($client->ville) ?>
+                <?= escape($client->rue) ?>,
+                <?= escape($client->code_postal) ?>,
+                <?= escape($client->ville) ?>
             </p>
 
 

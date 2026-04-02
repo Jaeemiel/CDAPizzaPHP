@@ -18,9 +18,9 @@
                     <?php foreach ($clients as $index => $client) : ?>
                         <tr class="table-row-hover stagger" style="animation-delay: <?= $index * 0.08 ?>s;">
                             <th scope="row"><?= $client->id ?></th>
-                            <td><?= htmlspecialchars($client->nom) ?></td>
-                            <td><?= htmlspecialchars($client->prenom) ?></td>
-                            <td><?= htmlspecialchars($client->telephone) ?></td>
+                            <td><?= escape($client->nom) ?></td>
+                            <td><?= escape($client->prenom) ?></td>
+                            <td><?= escape($client->telephone) ?></td>
                             <td>
                                 <a href="/clients/show/<?=$client->id?>" class="btn btn-success btn-gradient btn-sm me-2">
                                     <i class="bi bi-eye-fill me-1"></i>Show

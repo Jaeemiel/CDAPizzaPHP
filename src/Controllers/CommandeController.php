@@ -2,11 +2,13 @@
 
 namespace App\Controllers;
 
+use App\Core\Auth;
 use App\Core\Controller;
 use App\Core\Session;
 use App\Core\View;
 use App\Core\Validator;
 use App\Enum\EtatCommande;
+use App\Enum\Role;
 use App\Models\Client;
 use App\Models\Commande;
 use App\Models\Pizza;
@@ -22,13 +24,23 @@ class CommandeController extends Controller{
      */
     public function index() : void{
         $commandes = (new Commande())->findAll();
+        $role = Role::from(Auth::user()->role);
+
+        $commandesFiltrer = array_values(array_filter($commandes,
+            fn($c) => match ($role){
+                Role::CUISINE => $c->etat === EtatCommande::PREPARATION->value,
+                Role::GUICHET => $c->etat !== EtatCommande::LIVRER->value,
+                default => false,
+            }
+        ));
+
         $etatsCommandes = array_map(
             fn($c) => EtatCommande::from($c->etat),
-            $commandes
+            $commandesFiltrer
         );
 
         View::render("commandes.index",[
-            "commandes"=>$commandes,
+            "commandes"=>$commandesFiltrer,
             "etatsCommandes"=>$etatsCommandes,
         ]);
     }
@@ -70,10 +82,6 @@ class CommandeController extends Controller{
             "etatDefaut" => EtatCommande::PAYER,
         ]);
     }
-
-    //TODO: Prendre en compte la reduction et
-    // pk pas changer la base de données de commande avec un montant initial et
-    // montant final qui est si reduc calcul de montant * reduc sinon montant
 
     /**
      * Page du formulaire de création : POST
@@ -142,17 +150,61 @@ class CommandeController extends Controller{
             $this->redirect("/commandes");
             return;
         }
-        $reduction = new ReductionService();
 
+        $reduction = new ReductionService();
+        $role = Role::from(Auth::user()->role);
         $etat = EtatCommande::from($commande->etat);
+
         View::render("commandes.show",[
             "commande" => $commande,
             "etats" => EtatCommande::cases(),
             "etat" => $etat,
             "etatSuivant" => $etat->suivant(),
+            "peutChangerEtat" => $role->peutChangerEtat($etat),
             "reductions" => $reduction->getReductions($commande, $commande->client())
         ]);
 
+    }
+
+    /**
+     * Change l'état d'une commande
+     *
+     * @param mixed $id
+     * @return void
+     * @throws Exception
+     */
+    public function updateEtat(mixed $id): void
+    {
+        $id = intval($id);
+        $commande = (new Commande())->find($id);
+
+        if($commande === null){
+            Session::setFlash("danger", "Commande introuvable.");
+            $this->redirect("/commandes");
+            return;
+        }
+
+        $etat = EtatCommande::from($commande->etat);
+        $etatSuivant = $etat->suivant();
+        $role = Role::from(Auth::user()->role);
+
+        if ($etatSuivant === null) {
+            Session::setFlash("danger", "La commande est déjà au dernier état.");
+            $this->redirect("/commandes");
+            return;
+        }
+
+        if(!$role->peutChangerEtat($etat)){
+            Session::setFlash("danger", "Action non autorisée.");
+            $this->redirect("/commandes");
+            return;
+        }
+
+        $commande->etat = $etatSuivant->value;
+        $commande->save();
+
+        Session::setFlash("success", "État mis à jour : " . $etatSuivant->label());
+        $this->redirect("/commandes");
     }
 
     /**
@@ -182,41 +234,6 @@ class CommandeController extends Controller{
             "etats" => EtatCommande::cases(),
         ]);
     }
-
-    /**
-     * Change l'état d'une commande
-     *
-     * @param mixed $id
-     * @return void
-     * @throws Exception
-     */
-    public function updateEtat(mixed $id): void
-    {
-        $id = intval($id);
-        $commande = (new Commande())->find($id);
-
-        if($commande === null){
-            Session::setFlash("danger", "Commande introuvable.");
-            $this->redirect("/commandes");
-            return;
-        }
-
-        $etat = EtatCommande::from($commande->etat);
-        $etatSuivant = $etat->suivant();
-
-        if ($etatSuivant === null) {
-            Session::setFlash("danger", "La commande est déjà au dernier état.");
-            $this->redirect("/commandes");
-            return;
-        }
-
-        $commande->etat = $etatSuivant->value;
-        $commande->save();
-
-        Session::setFlash("success", "État mis à jour : " . $etatSuivant->label());
-        $this->redirect("/commandes");
-    }
-
 
     /**
      * Page du formulaire de modification : POST

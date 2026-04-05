@@ -1,10 +1,11 @@
 <?php
 
 use App\Core\Auth;
+use App\Enum\Role;
 
 ?>
 <div class="container py-5">
-    <div class="card mx-auto shadow-lg" style="max-width: 1200px;"
+    <div class="card mx-auto shadow-lg" style="max-width: 1200px;">
     <?php if (Auth::check()): ?>
         <?php $role = Auth::user()->role; ?>
         <div class="card-body p-4">
@@ -19,7 +20,8 @@ use App\Core\Auth;
 
 
             <!-- Infos commande -->
-            <p><strong>Client :</strong> <?= escape($commande->client()->nom) ?> <?= escape($commande->client()->prenom) ?></p>
+            <?php $client = $commande->client(); ?>
+            <p><strong>Client :</strong> <?= escape($client->nom) ?> <?= escape($client->prenom) ?></p>
             <p><strong>Date :</strong> <?= escape($commande->created_at) ?></p>
             <?php foreach ($reductions as $reduction):?>
                 <span class="badge bg-success"><?= $reduction->label() ?></span>
@@ -53,22 +55,23 @@ use App\Core\Auth;
             </table>
             <p><strong>Montant final : </strong>
                 <strong><?= escape(number_format($commande->montant_final,2))?> €</strong></p>
-            <p><strong>Commentaire : </strong> <?= $commande->commentaire ?? 'Aucun' ?></p>
+            <p><strong>Commentaire : </strong> <?= escape($commande->commentaire ?? 'Aucun') ?></p>
 
             <!-- Actions -->
             <div class="d-flex gap-2 mt-4">
-                <?php if($role==='GUICHET'):?>
+                <?php $role = Role::from(Auth::user()->role);?>
+                <?php if($role === Role::GUICHET):?>
                 <a href="/commandes/update/<?= $commande->id ?>" class="btn btn-warning">Modifier</a>
                 <?php endif;?>
                 <!-- Bouton changement état -->
-                <?php if ($etatSuivant): ?>
+                <?php if ($etatSuivant && $peutChangerEtat): ?>
                     <form action="/commandes/<?= $commande->id ?>/etat" method="POST">
                         <input type="hidden" name="etat" value="<?= $etatSuivant->value ?>">
                         <button type="submit" class="btn btn-warning">
                             <?= $etatSuivant->label() ?>
                         </button>
                     </form>
-                <?php else: ?>
+                <?php elseif(!$etatSuivant): ?>
                     <span class="text-muted">Commande finalisée</span>
                 <?php endif; ?>
 

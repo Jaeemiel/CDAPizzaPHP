@@ -309,6 +309,41 @@ class Validator
     }
 
     /**
+     * Vérifie que le mot de passe respecte les règles de complexité :
+     * - Au moins une majuscule
+     * - Au moins un chiffre
+     * - Au moins un caractère spécial
+     *
+     * @param mixed $value
+     * @param string $field
+     * @param array $params
+     * @return bool
+     */
+    public function password(mixed $value, string $field, array $params = []): bool {
+        return preg_match('/[A-Z]/', $value)  // -> majuscule
+            && preg_match('/[0-9]/', $value)  // -> chiffre
+            && preg_match('/[\W]/', $value);  // -> caractère spécial
+    }
+
+    /**
+     * Vérifie que deux champs sont identiques.
+     * Utile pour la confirmation de mot de passe.
+     *
+     * @param mixed $value
+     * @param string $field
+     * @param array $params [nom_du_champ_a_comparer]
+     * @return bool
+     * @throws Exception
+     */
+    public function same(mixed $value, string $field, array $params): bool {
+        if (empty($params[0])) {
+            throw new Exception("same nécessite le nom du champ à comparer");
+        }
+        return $value === ($this->data[$params[0]] ?? null);
+    }
+
+
+    /**
      * Ajoute un message d'erreur pour un champ donné.
      *
      * @param string $field

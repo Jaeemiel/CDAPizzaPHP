@@ -10,6 +10,7 @@ enum ValidationError: string
     case EXISTS = "exists";
     case MIN = "min";
     case MAX = "max";
+    case PASSWORD = 'password';
 
 
     /**
@@ -27,6 +28,7 @@ enum ValidationError: string
             self::EXISTS => "La valeur du champ {$field} n'existe pas.",
             self::MIN => "La valeur du champ: {$field} est trop courte.",
             self::MAX => "La valeur du champ: {$field} est trop longue.",
+            self::PASSWORD => "Le mot de passe doit contenir au moins une majuscule, un chiffre et un caractère spécial.",
         };
     }
 }

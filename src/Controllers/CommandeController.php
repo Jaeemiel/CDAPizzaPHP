@@ -7,12 +7,16 @@ use App\Core\Controller;
 use App\Core\Session;
 use App\Core\View;
 use App\Core\Validator;
+
 use App\Enum\EtatCommande;
 use App\Enum\Role;
+
 use App\Models\Client;
 use App\Models\Commande;
 use App\Models\Pizza;
+
 use App\Services\ReductionService;
+
 use Exception;
 
 class CommandeController extends Controller{
@@ -50,6 +54,7 @@ class CommandeController extends Controller{
      * @param Commande $commande
      * @param Client $client
      * @return void
+     * @throws Exception
      */
     private function applyNotifyDiscount(Commande $commande, Client $client): void
     {
@@ -263,7 +268,6 @@ class CommandeController extends Controller{
                 foreach ($typeError as $error){
 //                    var_dump($error['message']);
                     Session::setFlash("danger",$error['message']);
-
                 }
             }
             Session::set("old", $_POST);
@@ -318,9 +322,4 @@ class CommandeController extends Controller{
         Session::setFlash("danger", "La commande a bien été supprimée.");
         $this->redirect("/commandes");
     }
-
-
-
-
-
 }

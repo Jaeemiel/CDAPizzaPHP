@@ -146,9 +146,44 @@ class Router{
     }
 
     public function addMiddleware($array){
-
         $this->middlewares = $array;
-
     }
 
+    /**
+     * Crée les routes CRUD pour une ressource avec middlewares configurables.
+     *
+     * @param string $name       Nom de la ressource (ex: "commandes")
+     * @param string $controller Contrôleur associé (ex: App\Controllers\CommandeController::class)
+     * @param array  $middlewares Middlewares par action
+     *                           ['all' => [], 'index' => [], 'create' => [], ...]
+     * @return $this
+     */
+    public function resource(string $name, string $controller, array $middlewares = []): Router
+    {
+        $actions = [
+            ['GET',  "/$name",              "$controller::index",  'index'],
+            ['GET',  "/$name/create",       "$controller::create", 'create'],
+            ['POST', "/$name/create",       "$controller::store",  'store'],
+            ['GET',  "/$name/show/{id}",    "$controller::show",   'show'],
+            ['GET',  "/$name/update/{id}",  "$controller::edit",   'edit'],
+            ['POST', "/$name/update/{id}",  "$controller::update", 'update'],
+            ['POST', "/$name/delete/{id}",  "$controller::delete", 'delete'],
+        ];
+
+        foreach ($actions as [$method, $path, $action, $key]) {
+            $route = $this->add($method, $path, $action);
+
+            // Middlewares communs à toutes les actions
+            foreach ($middlewares['all'] ?? [] as $m) {
+                $route->middleware($m);
+            }
+
+            // Middlewares spécifiques à l'action
+            foreach ($middlewares[$key] ?? [] as $m) {
+                $route->middleware($m);
+            }
+        }
+
+        return $this;
+    }
 }

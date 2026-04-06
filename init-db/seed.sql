@@ -34,6 +34,8 @@ INSERT INTO commande_pizza (commande_id, pizza_id, nb_pizza, prix_unitaire) VALU
 
 USE CDAPersonnel;
 
-INSERT INTO utilisateur (login, password, role) VALUES
-('guichet1', '$2y$10$nd.1ipCZiGnSuhx6HaB0D.lSGbKcw1tWcMtOi04FRY.UrTg0OnRii', 'GUICHET'),
-('cuisine1', '$2y$10$swd8X6uew21DGxYz3khwquCuNjgL7PUNLY/PaF11GTlPmxdymEynC', 'CUISINE');
+INSERT INTO utilisateur (login, password, role, must_change_password) VALUES
+('guichet1', '$2y$10$nd.1ipCZiGnSuhx6HaB0D.lSGbKcw1tWcMtOi04FRY.UrTg0OnRii', 'GUICHET', FALSE),
+('cuisine1', '$2y$10$swd8X6uew21DGxYz3khwquCuNjgL7PUNLY/PaF11GTlPmxdymEynC', 'CUISINE', FALSE),
+('gerant1', '$2y$10$ge39XbXVbmOaiw5HEZgrV.ErGHNPA0q.1Pjzz4MCNciuQXOmapZ0O', 'GERANT', FALSE),
+('newuser1', '$2y$10$qeW5TlRc.UmfzoJOG9.cZOdX/jf5HygA6AncLzYkD.yP5dqehwuVS', 'GUICHET', TRUE);

@@ -36,7 +36,7 @@ use App\Core\Auth;
                                 </a>
                                 <form action="/pizzas/delete/<?= $pizza->id ?>" method="POST" class="d-inline"
                                       onsubmit="return confirm('Supprimer cette pizza ?')">
-                                    <?= Csrf::field() ?>
+<!--                                    --><?php //= Csrf::field() ?>
                                     <button type="submit" class="btn btn-danger btn-gradient-danger btn-sm">
                                         <i class="bi bi-trash-fill me-1"></i>Delete
                                     </button>

@@ -59,10 +59,10 @@ use App\Core\Auth;
 
                     <!-- Pizza -->
                     <?php if (in_array($role, ['GERANT', 'CUISINE'])): ?>
+                        <li class="nav-item"><a class="nav-link fw-bold text-primary" href="/pizzas">Liste des pizzas</a></li>
                         <?php if ($role === 'GERANT'): ?>
                             <li class="nav-item"><a class="nav-link fw-bold text-primary" href="/pizzas/create">Création Pizza</a></li>
                         <?php endif; ?>
-                        <li class="nav-item"><a class="nav-link fw-bold text-primary" href="/pizzas">Liste des pizzas</a></li>
                     <?php endif; ?>
 
                 <?php endif; ?>

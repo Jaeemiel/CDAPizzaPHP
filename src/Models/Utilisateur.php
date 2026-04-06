@@ -33,6 +33,17 @@ class Utilisateur extends Model{
     public string $password = "";
 
     /**
+     * Représente si un mot de passe doit changer ou non.
+     * @var bool
+     */
+    public bool $must_change_password = true;
+
+    /** Date de dernière modification
+     * @var string|null
+     */
+    public ?string $password_changed_at  = null;
+
+    /**
      * Rôle de l'utilisateur
      * @see Role
      * @var string
@@ -45,13 +56,19 @@ class Utilisateur extends Model{
      */
     public bool $actif = true;
 
-    /** Date de création @var string|null */
+    /** Date de création
+     * @var string|null
+     */
     public ?string $created_at = null;
 
-    /** Date de dernière modification @var string|null */
+    /** Date de dernière modification
+     * @var string|null
+     */
     public ?string $updated_at = null;
 
-    /** Date de suppression logique (soft delete) @var string|null */
+    /** Date de suppression logique (soft delete)
+     * @var string|null
+     */
     public ?string $deleted_at = null;
 
     public array $fillable = [

@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\Auth;
 use App\Core\Controller;
 use App\Core\Session;
 use App\Core\Validator;
@@ -10,12 +11,12 @@ use App\Core\View;
 class PasswordController extends Controller{
 
     public function edit(): void{
-        View::render("auth.password");
+        View::render("auth.password",[],false);
     }
 
     public function update(): void{
         $validator = new Validator($_POST,[
-            "password" => "required|min:12|password",
+            "password" => "required|min:8|password",
             "password_confirmation" => "required|same:password",
         ]);
 

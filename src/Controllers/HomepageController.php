@@ -9,6 +9,6 @@ use App\Core\View;
 class HomepageController extends Controller{
 
     public function home():void{
-        View::render("HomePage.index");
+        View::render("HomePage.index",[],false);
     }
 }

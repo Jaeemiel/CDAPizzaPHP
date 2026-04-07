@@ -1,142 +1,155 @@
-<!--<style>-->
-<!--    :root {-->
-<!--        --violet: #7048E9;-->
-<!--        --cyan:   #1AF3D9;-->
-<!--        --sky:    #7EB5D8;-->
-<!--        --blue:   #406DCF;-->
-<!--    }-->
-<!--    body { background: #0E0C1E; color: #E8E6FF; font-family: 'Segoe UI', sans-serif; }-->
-<!---->
-<!--    /* NAV */-->
-<!--    .navbar { background: #16132E; border-bottom: 1px solid rgba(255,255,255,0.08); }-->
-<!--    .navbar-brand { color: var(--cyan) !important; font-weight: 700; font-size: 1.3rem; }-->
-<!--    .btn-violet  { background: var(--violet); color: #fff; border: none; }-->
-<!--    .btn-violet:hover  { background: #5a38cc; color: #fff; }-->
-<!--    .btn-outline-c { color: var(--cyan); border: 1px solid var(--cyan); background: transparent; }-->
-<!--    .btn-outline-c:hover { background: var(--cyan); color: #0E0C1E; }-->
-<!---->
-<!--    /* HERO */-->
-<!--    .hero { background: linear-gradient(135deg, #16132E 0%, #1a1440 100%); padding: 5rem 0; }-->
-<!--    .hero h1 { font-size: 2.4rem; font-weight: 800; }-->
-<!--    .hero h1 span { color: var(--cyan); }-->
-<!--    .hero p { color: rgba(200,197,255,0.65); }-->
-<!---->
-<!--    /* CARDS */-->
-<!--    .card-dark {-->
-<!--        background: rgba(255,255,255,0.04);-->
-<!--        border: 1px solid rgba(255,255,255,0.09);-->
-<!--        border-radius: 14px;-->
-<!--    }-->
-<!--    .card-dark:hover { border-color: var(--violet); }-->
-<!---->
-<!--    /* TÂCHES */-->
-<!--    .task-row { padding: .65rem .9rem; border-radius: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }-->
-<!--    .badge-done  { background: rgba(26,243,217,0.15);  color: var(--cyan); font-size: .7rem; }-->
-<!--    .badge-going { background: rgba(126,181,216,0.15); color: var(--sky);  font-size: .7rem; }-->
-<!--    .badge-todo  { background: rgba(255,255,255,0.07); color: rgba(200,197,255,0.55); font-size: .7rem; }-->
-<!---->
-<!--    /* STATUTS */-->
-<!--    .status-todo  { border: 1px solid rgba(200,197,255,0.12); background: rgba(255,255,255,0.03); border-radius: 12px; padding: 1.4rem; }-->
-<!--    .status-going { border: 1px solid rgba(64,109,207,0.3);   background: rgba(64,109,207,0.07);  border-radius: 12px; padding: 1.4rem; }-->
-<!--    .status-done  { border: 1px solid rgba(26,243,217,0.3);   background: rgba(26,243,217,0.06);  border-radius: 12px; padding: 1.4rem; }-->
-<!---->
-<!--    /* CTA */-->
-<!--    .cta { background: linear-gradient(135deg, rgba(112,72,233,0.2), rgba(64,109,207,0.15)); border-top: 1px solid rgba(112,72,233,0.2); }-->
-<!---->
-<!--    footer { background: #16132E; border-top: 1px solid rgba(255,255,255,0.07); font-size: .82rem; color: rgba(200,197,255,.35); }-->
-<!--    footer span { color: var(--cyan); }-->
-<!---->
-<!--    .section-label { color: var(--cyan); font-size: .75rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }-->
-<!--</style>-->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDA PIZZA - Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container-fluid px-4 py-5 min-vh-100 d-flex flex-column justify-content-center">
 
-<body>
+    <!-- Header simple -->
+    <header class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary mb-3">
+            <i class="bi bi-pizza-slice me-3"></i>
+            CDA PIZZA
+        </h1>
+        <p class="lead text-muted mb-5">Application de gestion interne</p>
+    </header>
 
+    <main class="row g-4 justify-content-center">
+        <!-- GUICHET -->
+        <section class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm role-card">
+                <div class="card-body p-4 text-center">
+                    <div class="role-icon mb-3">
+                        <i class="bi bi-cash-stack text-warning display-4"></i>
+                    </div>
+                    <h3 class="h4 fw-bold mb-3 text-dark">Guichet</h3>
+                    <div class="badge bg-warning-subtle text-warning fs-6 px-3 py-2 mb-3">Commandes</div>
+                    <ul class="list-unstyled small text-muted mb-0-0">
+                        <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Création clients</li>
+                        <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Gestion commandes</li>
+                        <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>PAYER → PRÉPARATION</li>
+                        <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>PRÊTE → LIVRER</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
+        <!-- CUISINE -->
+        <section class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm role-card">
+                <div class="card-body p-4 text-center">
+                    <div class="role-icon mb-3">
+                        <i class="bi bi-fire text-success display-4"></i>
+                    </div>
+                    <h3 class="h4 fw-bold mb-3 text-dark">Cuisine</h3>
+                    <div class="badge bg-success-subtle text-success fs-6 px-3 py-2 mb-3">Production</div>
+                    <ul class="list-unstyled small text-muted mb-0-0">
+                        <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Consultation</li>
+                        <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>PRÉPARATION → PRÊTE</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
-<!-- HERO -->
-<!--<section class="hero text-center">-->
-<!--    <div class="container" style="max-width:620px">-->
-<!--        <h1>Organisez vos tâches,<br/><span>sans prise de tête.</span></h1>-->
-<!--        <p class="mt-3 mb-4">Classez par catégorie, suivez l'état de chaque tâche, et avancez sereinement au quotidien.</p>-->
-<!--    </div>-->
-<!--</section>-->
+        <!-- GÉRRANT -->
+        <section class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm role-card">
+                <div class="card-body p-4 text-center">
+                    <div class="role-icon mb-3">
+                        <i class="bi bi-person-gear text-primary display-4"></i>
+                    </div>
+                    <h3 class="h4 fw-bold mb-3 text-dark">Gérant</h3>
+                    <div class="badge bg-primary-subtle text-primary fs-6 px-3 py-2 mb-3">Administration</div>
+                    <ul class="list-unstyled small text-muted mb-0">
+                        <li class="mb-2"><i class="bi bi-check-lg text-success me-2"></i>Pizzas/stocks</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
 
-<!-- CATÉGORIES -->
-<!--<section class="py-5" style="background:rgba(255,255,255,.02);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06)">-->
-<!--    <div class="container" style="max-width:720px">-->
-<!--        <p class="section-label text-center mb-2"><i class="bi bi-grid me-1"></i>Catégories</p>-->
-<!--        <h2 class="text-center fw-bold mb-4" style="font-size:1.6rem;">Un espace pour chaque domaine</h2>-->
-<!--        <div class="row g-3 text-center">-->
-<!--            <div class="col-6 col-md-3">-->
-<!--                <div class="card-dark p-3 h-100">-->
-<!--                    <div style="font-size:2rem;">💰</div>-->
-<!--                    <div class="fw-600 mt-2" style="font-size:.9rem;">Économique</div>-->
-<!--                    <div style="font-size:.75rem;color:rgba(200,197,255,.5);">Factures, budget…</div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-6 col-md-3">-->
-<!--                <div class="card-dark p-3 h-100">-->
-<!--                    <div style="font-size:2rem;">🏠</div>-->
-<!--                    <div class="fw-600 mt-2" style="font-size:.9rem;">Ménagère</div>-->
-<!--                    <div style="font-size:.75rem;color:rgba(200,197,255,.5);">Courses, entretien…</div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-6 col-md-3">-->
-<!--                <div class="card-dark p-3 h-100">-->
-<!--                    <div style="font-size:2rem;">💼</div>-->
-<!--                    <div class="fw-600 mt-2" style="font-size:.9rem;">Professionnelle</div>-->
-<!--                    <div style="font-size:.75rem;color:rgba(200,197,255,.5);">Projets, réunions…</div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-6 col-md-3">-->
-<!--                <div class="card-dark p-3 h-100">-->
-<!--                    <div style="font-size:2rem;">🌱</div>-->
-<!--                    <div class="fw-600 mt-2" style="font-size:.9rem;">Personnelle</div>-->
-<!--                    <div style="font-size:.75rem;color:rgba(200,197,255,.5);">Sport, loisirs…</div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</section>-->
+    <!-- Bouton central "Se connecter" -->
+    <footer class="mt-auto text-center pt-5">
+        <a href="/login" class="btn btn-primary btn-lg px-5 py-3 fw-bold shadow-sm login-btn"
+           aria-label="Accéder au formulaire de connexion">
+            <i class="bi bi-box-arrow-right me-3"></i>
+            SE CONNECTER
+        </a>
+    </footer>
+</div>
 
-<!-- ÉTATS -->
-<!--<section class="py-5">-->
-<!--    <div class="container" style="max-width:720px">-->
-<!--        <p class="section-label text-center mb-2"><i class="bi bi-arrow-repeat me-1"></i>États des tâches</p>-->
-<!--        <h2 class="text-center fw-bold mb-4" style="font-size:1.6rem;">Suivez chaque étape</h2>-->
-<!--        <div class="row g-3 text-center">-->
-<!--            <div class="col-md-4">-->
-<!--                <div class="status-todo h-100">-->
-<!--                    <div style="font-size:2rem;">⭕</div>-->
-<!--                    <div class="fw-bold mt-2">Pas commencé</div>-->
-<!--                    <p style="font-size:.82rem;color:rgba(200,197,255,.55);margin-top:.4rem;">Tâche planifiée, en attente de démarrage.</p>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-md-4">-->
-<!--                <div class="status-going h-100">-->
-<!--                    <div style="font-size:2rem;">🔵</div>-->
-<!--                    <div class="fw-bold mt-2" style="color:var(--sky)">En cours</div>-->
-<!--                    <p style="font-size:.82rem;color:rgba(200,197,255,.55);margin-top:.4rem;">Tâche active, vous travaillez dessus.</p>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-md-4">-->
-<!--                <div class="status-done h-100">-->
-<!--                    <div style="font-size:2rem;">✅</div>-->
-<!--                    <div class="fw-bold mt-2" style="color:var(--cyan)">Terminé</div>-->
-<!--                    <p style="font-size:.82rem;color:rgba(200,197,255,.55);margin-top:.4rem;">Tâche accomplie et archivée.</p>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</section>-->
+<style>
+    /* Minimaliste et pro */
+    .role-card {
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
 
-<!-- CTA -->
-<!--<section class="cta py-5 text-center">-->
-<!--    <div class="container">-->
-<!--        <h2 class="fw-bold mb-3">Prêt à vous organiser ?</h2>-->
-<!--        <div class="d-flex gap-3 justify-content-center flex-wrap">-->
-<!--            <a href="/users/create" class="btn btn-violet px-4"><i class="bi bi-person-plus me-2"></i>Créer un compte</a>-->
-<!--            <a href="/login" class="btn btn-outline-c px-4">Se connecter</a>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</section>-->
+    .role-card:hover {
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        transform: translateY(-4px);
+    }
+
+    .role-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.7);
+    }
+
+    /* Bouton login central */
+    .login-btn {
+        background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+        border: none;
+        border-radius: 12px;
+        font-size: 1.125rem;
+        min-width: 220px;
+        box-shadow: 0 4px 16px rgba(13,110,253,0.3);
+        transition: all 0.3s ease;
+    }
+
+    .login-btn:hover {
+        background: linear-gradient(135deg, #0b5ed7, #0a58ca);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(13,110,253,0.4);
+        color: white !important;
+        text-decoration: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .display-4 { font-size: 2.5rem !important; }
+        .login-btn {
+            font-size: 1rem;
+            min-width: 200px;
+            padding: 0.875rem 1.5rem;
+        }
+    }
+
+    /* Accessibilité */
+    @media (prefers-reduced-motion: reduce) {
+        .role-card, .login-btn {
+            transition: none;
+        }
+    }
+
+    .login-btn:focus-visible {
+        outline: 3px solid #0d6efd;
+        outline-offset: 3px;
+    }
+
+    /* Contrastes parfaits */
+    @media (prefers-color-scheme: dark) {
+        body { background-color: #1a1a1a; color: #e0e0e0; }
+        .card { background-color: #2a2a2a; border-color: #444; }
+    }
+</style>

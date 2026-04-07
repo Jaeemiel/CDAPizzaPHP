@@ -34,7 +34,7 @@ class PasswordController extends Controller{
 
         $user = Auth::user();
         $user->password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $user->must_change_password = false;
+        $user->must_change_password = 0;
         $user->password_changed_at = date('Y-m-d H:i:s');
         $user->save();
 

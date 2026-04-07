@@ -34,9 +34,10 @@ class Utilisateur extends Model{
 
     /**
      * Représente si un mot de passe doit changer ou non.
-     * @var bool
+     * 1 oui, 0 non
+     * @var int
      */
-    public bool $must_change_password = true;
+    public int $must_change_password = 1;
 
     /** Date de dernière modification
      * @var string|null
@@ -76,6 +77,7 @@ class Utilisateur extends Model{
         "password",
         "role",
         "actif",
+        "must_change_password",
     ];
 
     /**

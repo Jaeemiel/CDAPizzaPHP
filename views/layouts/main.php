@@ -278,7 +278,7 @@
 <nav class="navbar navbar-expand-lg px-3">
     <div class="container-fluid">
         <!-- Brand -->
-        <a class="navbar-brand fw-bold text-primary" href="/">
+        <a class="navbar-brand fw-bold text-primary" >
             <i class="bi bi-pizza-slice me-2"></i>CDA PIZZA
         </a>
         <!-- Mobile toggle -->

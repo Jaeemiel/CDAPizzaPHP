@@ -129,19 +129,14 @@ class Router{
     }
 
     public function middleware($middleware){
-
-        //var_dump($middleware);
         if(str_contains($middleware, ":")){
             [$name, $params] = explode(":", $middleware);
-            //var_dump($this->middlewares[$name]);
             $m = new $this->middlewares[$name](trim($params));
-            //var_dump($m);
         }else{
             $name = $middleware;
             $m = new $this->middlewares[$name]();
         }
         $this->routes[$this->lastMethod][$this->lastRoute]["middleware"][]= $m;
-        //var_dump($this->routes[$this->lastMethod][$this->lastRoute]);
         return $this;
     }
 

@@ -47,9 +47,7 @@ class PizzaController extends Controller
 
         if($validator->fails()){
             foreach ($validator->errors as $typeError){
-//                var_dump($typeError);
                 foreach ($typeError as $error){
-//                    var_dump($error['message']);
                     Session::setFlash("danger",$error['message']);
                 }
             }
@@ -117,9 +115,7 @@ class PizzaController extends Controller
 
         if($validator->fails()){
             foreach ($validator->errors as $typeError){
-//                var_dump($typeError);
                 foreach ($typeError as $error){
-//                    var_dump($error['message']);
                     Session::setFlash("danger",$error['message']);
 
                 }

@@ -153,7 +153,6 @@ class Model {
      * @return static|array|null Une instance si $isOne, un tableau d'instances sinon, null si non trouvé
      */
     public function findBy(string $field, string $value, bool $isOne = false):Model|array|null{
-        # SELECT * FROM user WHERE mail = toto@trotro.wip
         $sql = "SELECT * FROM {$this->getNameTable()} WHERE {$field} = :{$field}";
         return $this->readQuery($sql, ["{$field}" => $value], $isOne);
     }

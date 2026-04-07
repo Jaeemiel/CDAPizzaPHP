@@ -62,7 +62,6 @@ class Validator
         foreach ($this->rules as $field => $ruleString) {
             $value = $this->data[$field] ?? null;
             $rules = explode("|", $ruleString);
-//            var_dump($rules);
 
             # Gestion nullable avec pas de valeur dans le champ
             if(in_array('nullable', $rules,true) && $this->isEmpty($value)){
@@ -70,18 +69,14 @@ class Validator
             }
 
             foreach ($rules as $rule) {
-//                var_dump($rule);
-//                var_dump($this->applyRule($rule, $field, $value));
                 $result = $this->applyRule($rule, $field, $value);
                 if(!$result){
-                    //var_dump($this->errors);
                     $isValid = false;
                 }else{
                     $this->validated[$field] = $value;
                 }
             }
         }
-//        var_dump($this->getValidated());
         return $isValid;
     }
 
@@ -105,14 +100,6 @@ class Validator
             $name = $rule;
             $params = [];
         }
-
-//        var_dump([
-//            "name" => $name,
-//            "field" => $field,
-//            "value" => $value,
-//            "params" => $params,
-//        ]);
-
 
         if(!method_exists($this, $name)){
             throw new Exception("La règle {$name} n'existe pas.");
@@ -210,13 +197,11 @@ class Validator
 
         $pdo = Database::getPDO();
         [$nameTable, $champ] = $params;
-//        var_dump($sql = "SELECT COUNT(id) FROM {$nameTable} WHERE {$champ} = '{$value}'");
         $sql = "SELECT COUNT(id) FROM {$nameTable} WHERE {$champ} = :value";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['value'=>$value]);
         $data = $stmt->fetchColumn();
-//        var_dump("Data renvoi: " . $data);
         return $data == 0;
     }
 
@@ -264,7 +249,6 @@ class Validator
         if(empty($params)){
             throw new Exception("exists nécessite le nom de la table");
         }
-//        var_dump(["params" => $params, "values" => $values]);
         $pdo = Database::getPDO();
         $nameTable = $params[0];
 
@@ -275,9 +259,6 @@ class Validator
             if(!is_int($id) && !ctype_digit((string) $id)){
                 return false;
             }
-//                var_dump($value);
-//                var_dump($value);
-//                var_dump($sql = "SELECT EXISTS(SELECT 1 FROM {$nameTable} WHERE id = :id)");
 
             $stmt->execute(["id"=>(int) $id]);
             if(!$stmt->fetchColumn()){
@@ -404,7 +385,6 @@ class Validator
                 $data[]=$value;
             }
         }
-//        var_dump($data);
         return $data;
     }
 
@@ -422,7 +402,6 @@ class Validator
                 $data[]=$value;
             }
         }
-//        var_dump($data);
         return $data;
     }
 

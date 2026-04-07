@@ -27,7 +27,6 @@ trait IsFillable {
      * @return string
      */
     public function getPreparedValues(bool $isUpdate = false){
-        # username = :username OU :username
         $preparedValues = [];
         foreach ($this->fillable as $attr){
             if ($isUpdate) {

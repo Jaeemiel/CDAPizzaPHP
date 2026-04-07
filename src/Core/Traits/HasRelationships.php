@@ -43,8 +43,7 @@ trait HasRelationships {
      * @return Model|array
      */
     public function hasMany(string $targetClass, string $foreingKey):Model|array{
-        $targetTable = (new $targetClass())->getNameTable(); # article
-        # SELECT * FROM article WHERE user_id = 2
+        $targetTable = (new $targetClass())->getNameTable();
         $sql = "SELECT * FROM {$targetTable} WHERE {$foreingKey} = :id";
         return $this->readQuery($sql, ["id" => $this->id], false, $targetClass);
     }
@@ -87,7 +86,7 @@ trait HasRelationships {
             ];
             $stmt = $this->pdo->prepare($sqlDelete);
             $stmt->execute($dataDelete);
-            //$this->writeQuery($sqlDelete, $dataDelete);
+
             # ET ENSUITE ON AJOUTE
             if ($pivotTable == "") {
                 $pivotTable = $baseTable . '_' . $targetTable; # user_role
@@ -118,7 +117,7 @@ trait HasRelationships {
         $data = [
             "id"=>$this->id,
         ];
-        var_dump($sql);
+
         return $this->writeQuery($sql, $data);
     }
 }

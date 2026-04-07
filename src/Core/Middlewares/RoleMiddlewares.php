@@ -13,7 +13,6 @@ class RoleMiddlewares implements InterfaceMiddlewares {
     }
 
     public function handle() : void {
-//        var_dump($this->expected_role);
         $user = Auth::user();
         if (!in_array($user->role,$this->expected_role)) {
 

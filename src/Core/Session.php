@@ -43,4 +43,9 @@ class Session{
         $_SESSION["user"] = $id;
     }
 
+    public static function destroy(): void {
+        session_unset();   // vide toutes les variables de session
+        session_destroy(); // détruit la session côté serveur
+        self::$instance = null; // reset le singleton
+    }
 }

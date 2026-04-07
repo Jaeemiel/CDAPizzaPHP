@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use App\Enum\Role;
 use App\Models\Utilisateur;
 
 class Auth{
@@ -42,13 +43,28 @@ class Auth{
     public static function login(Utilisateur $user): void{
         Session::setUser($user->id);
         Session::setFlash("success", "Connexion réussie");
-        header("location: /commandes");
+
+        if ($user->must_change_password) {
+            Session::setFlash("warning", "Veuillez changer votre mot de passe avant de continuer.");
+            header("location: /password/change");
+            exit;
+        }
+
+        $role = Role::from($user->role);
+        $redirect = match($role) {
+            Role::GUICHET => "/commandes",
+            Role::CUISINE => "/commandes",
+            Role::GERANT  => "/pizzas",
+        };
+
+        header("location: $redirect");
         exit;
     }
 
-    public static function logout(): void{
-        unset($_SESSION["user"]);
-        Session::setFlash("success", "Vous êtes bien deconnecté");
+    public static function logout(): void {
+        Session::destroy();
+        Session::getInstance(); // recrée une session propre
+        Session::setFlash("success", "Vous êtes bien déconnecté");
         header("Location: /login");
         exit;
     }

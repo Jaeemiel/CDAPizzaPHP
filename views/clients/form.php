@@ -11,73 +11,77 @@ if (isset($client->id)){
     $action = "create";
     $titres = "Créer un ";
     $actionUri = "/clients/create";
-    $titreBtn = "Créer le client";
+    $titreBtn = "Créer";
 }
 ?>
 
 <div class="container py-5" style="max-width: 620px;">
 
     <!-- En-tête -->
-    <div class="mb-4">
-        <a href="/commandes" class="text-decoration-none d-inline-flex align-items-center gap-2 mb-3"
-           style="color:rgba(200,197,255,.5);font-size:.85rem;">
-            <i class="bi bi-arrow-left"></i> Retour aux commandes
+    <div class="text-center text-md-start mb-5">
+        <a href="/commandes" class="btn btn-outline-c btn-sm mb-3 d-inline-flex align-items-center gap-2 btn-app">
+            <i class="bi bi-arrow-left"></i>Retour
         </a>
-        <h1 class="fw-bold mb-1" style="font-size:1.8rem;"><?= $titres ?> client</h1>
+        <h1 class="page-title mb-0"><?= $titres ?> client</h1>
     </div>
 
     <!-- Formulaire -->
-    <div class="form-card">
+    <div class="form-card app-card">
         <form action="<?= $actionUri ?>" method="POST">
             <?= Csrf::field()?>
 
             <!-- Nom -->
-            <div class="mb-3">
-                <label class="form-label">Nom</label>
-                <input type="text" class="form-control" name="nom"
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Nom</label>
+                <input type="text" class="form-control form-control-lg shadow-sm"  name="nom"
                        value="<?= isset($client->nom) ? escape($client->nom): '' ?>"/>
             </div>
             <!-- Prénom -->
             <div class="mb-3">
-                <label class="form-label">Prénom</label>
-                <input type="text" class="form-control" name="prenom"
+                <label class="form-label fw-semibold">Prénom</label>
+                <input type="text" class="form-control form-control-lg shadow-sm"  name="prenom"
                        value="<?= isset($client->prenom) ? escape($client->prenom): '' ?>"/>
             </div>
             <hr class="form-divider" />
             <!-- Téléphone -->
-            <div class="mb-3">
-                <label class="form-label">Téléphone</label>
-                <input type="tel" class="form-control" name="telephone"
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Téléphone</label>
+                <input type="tel" class="form-control shadow-sm" name="telephone"
                        value="<?= isset($client->telephone) ? escape($client->telephone): '' ?>"/>
             </div>
             <hr class="form-divider" />
             <!-- Rue -->
-            <div class="mb-3">
-                <label class="form-label">Rue</label>
-                <input type="text" class="form-control" name="rue"
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Rue</label>
+                <input type="text" class="form-control form-control-lg shadow-sm"  name="rue"
                        value="<?= isset($client->rue) ? escape($client->rue): '' ?>"/>
             </div>
             <!-- Code Postal -->
-            <div class="mb-3">
-                <label class="form-label">Code postal</label>
-                <input type="text" class="form-control" name="code_postal"
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Code postal</label>
+                <input type="text" class="form-control form-control-lg shadow-sm"  name="code_postal"
                        value="<?= isset($client->code_postal) ? escape($client->code_postal): '' ?>"/>
             </div>
             <!-- Ville -->
-            <div class="mb-3">
-                <label class="form-label">Ville</label>
-                <input type="text" class="form-control" name="ville"
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Ville</label>
+                <input type="text" class="form-control form-control-lg shadow-sm"  name="ville"
                        value="<?= isset($client->ville) ? escape($client->ville): '' ?>"/>
             </div>
 
 
 
             <!-- Boutons -->
-            <div class="d-flex gap-3">
-                <button type="submit" class="btn btn-violet px-4 flex-grow-1">
-                    <i class="bi bi-<?= $action === 'create' ? 'plus-circle' : 'pencil-fill' ?> me-2"></i><?= $titreBtn ?>
+            <div class="d-flex gap-3 mt-5">
+                <button type="submit" class="btn btn-violet btn-lg px-5 flex-grow-1 btn-app">
+                    <i class="bi bi-<?= $action === 'create' ? 'plus-circle' : 'pencil-fill' ?> me-2"></i>
+                    <?= $titreBtn ?>
                 </button>
-                <a href="/commandes/create" class="btn btn-outline-c px-4">Annuler</a>
+                <?php if($action === 'create'):?>
+                    <a href="/commandes/create" class="btn btn-outline-c btn-lg px-4 btn-app">Annuler</a>
+                <?php else:?>
+                    <a href="/clients" class="btn btn-outline-c btn-lg px-4 btn-app">Annuler</a>
+                <?php endif; ?>
             </div>
 
         </form>

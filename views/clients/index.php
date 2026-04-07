@@ -1,3 +1,6 @@
+<?php
+use App\Helpers\Csrf;
+?>
 <div class="container py-5">
     <h1 class="text-center mb-4 fw-bold animate-fade-in">Liste des clients</h1>
 
@@ -30,7 +33,7 @@
                                 </a>
                                 <form action="/clients/delete/<?= $client->id ?>" method="POST" class="d-inline"
                                       onsubmit="return confirm('Supprimer ce client ?')">
-                                    <!--                                    --><?php //= Csrf::field() ?>
+                                    <?= Csrf::field() ?>
                                     <button type="submit" class="btn btn-danger btn-gradient-danger btn-sm">
                                         <i class="bi bi-trash-fill me-1"></i>Delete
                                     </button>
